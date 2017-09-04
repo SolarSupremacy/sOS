@@ -190,7 +190,7 @@ end
 
 function gra.text(x, y, str)
   for i=1, string.len(str) do
-    gra.set(x+i-1, y, str:sub(i,i))
+    gra.set(x+i-1, y, string.sub(str, utf8.offset(str, i), utf8.offset(str, i+1)-1))
   end
 end
 

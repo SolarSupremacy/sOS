@@ -9,8 +9,8 @@ function app.load()
   -- For reference, inner window dimentions are 4 shorter and 2 thinner.
   -- Example: outer width 40 and height 20 makes inner width 38 and height 16.
   -- "title" is the text at the top of the window, "mini" is if the app is minimized.
-  appInfo.width = 40
-  appInfo.height = 21
+  appInfo.width = 60
+  appInfo.height = 51
   appInfo.title = "Template App"
   appInfo.mini = false
   return (appInfo)

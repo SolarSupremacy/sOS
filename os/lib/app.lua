@@ -4,6 +4,8 @@ local app = {}
 
 apps = {}
 
+appManager = {}
+
 function app.newTask(dir, tag)
   
   -- Getting lowest unused PID.
@@ -46,6 +48,8 @@ function app.newTask(dir, tag)
   apps[pid].y = math.floor((textGrid.height - apps[pid].height) / 2)
   
   gra.appCanvasReset(pid)
+  
+  table.insert(appManager, 1, pid)
   
   print("New Task Created. "..pid.." - "..apps[pid].title)
   

@@ -1,5 +1,7 @@
 local api = {}
 
+currentPID = 0
+
 api.g = {}
 
 function api.g.set(x, y, char)
@@ -24,6 +26,12 @@ function api.g.box(x, y, w, h, adapt)
     gra.appMakeBox(currentPID, x, y, w, h)
   end
   return (true)
+end
+
+api.i = {}
+
+function api.i.keyStat(key)
+  return (love.keyboard.isDown(key))
 end
 
 return (api)

@@ -24,8 +24,6 @@ app = require("os.lib.app")
 api = require("os.lib.api")
 utf8 = require("utf8")
 
-currentPID = 0
-
 function love.run()
   
 	if love.math then
@@ -139,7 +137,8 @@ function love.draw()
   end
   
   -- Draw Apps
-  for pid,v in pairs(apps) do
+  for l = #appManager, 1, -1 do
+    pid = appManager[l]
     
     gra.setColor(15)
     gra.makeBox(apps[pid].x, apps[pid].y, apps[pid].width, apps[pid].height)
@@ -183,22 +182,26 @@ function love.draw()
     love.graphics.print(line ,textGrid.widthbuffer, textGrid.heightbuffer + 14 * (i-1))
   end
   
-  --[[love.graphics.print("      ╔═════╦═════╗\n      ║     ║     ║\n      ║  ║  ║  ═══╣\n╔═════╣  ║  ║     ║\n║  ═══╣  ║  ╠═══  ║\n╠═══  ║     ║     ║\n╚═════╩═════╩═════╝", textGrid["WidthBuffer"], textGrid["HeightBuffer"])
-  love.graphics.setColor(255,255,255)
-  love.graphics.print("░░░░\n░░░░", 0, 120)
-  love.graphics.print("▒▒▒▒\n▒▒▒▒", 0, 148)
-  love.graphics.print("▓▓▓▓\n▓▓▓▓", 0, 176)
-  love.graphics.print("████\n████", 0, 204)
-  love.graphics.print("│ ─ └ ┘ ┐ ┌ ├ ┤ ┴ ┬ ┼", 0, 300)
-  love.graphics.print("║ ═ ╚ ╝ ╗ ╔ ╠ ╣ ╩ ╦ ╬", 0, 328)
-  
-  for i=0, 7 do
-    gra.setColor(i)
-    love.graphics.print("      ╔═════╦═════╗\n      ║     ║     ║\n      ║  ║  ║  ═══╣\n╔═════╣  ║  ║     ║\n║  ═══╣  ║  ╠═══  ║\n╠═══  ║     ║     ║\n╚═════╩═════╩═════╝", 200, 100+100*i)
+end
+
+function love.textinput(char)
+  if apps[appManager[1]].code.textInput ~= nil then
+    apps[appManager[1]].code.textInput(char)
   end
-  for i=8, 15 do
-    gra.setColor(i)
-    love.graphics.print("      ╔═════╦═════╗\n      ║     ║     ║\n      ║  ║  ║  ═══╣\n╔═════╣  ║  ║     ║\n║  ═══╣  ║  ╠═══  ║\n╠═══  ║     ║     ║\n╚═════╩═════╩═════╝", 400, -700+100*i)
-  end]]
+end
+
+function love.keypressed(key, scan, rep)
+  if key == "tab" then
+    table.insert(appManager, table.remove(appManager, 1))
+  end
   
+  if apps[appManager[1]].code.keyPress ~= nil then
+    apps[appManager[1]].code.keyPress(key, rep)
+  end
+end
+
+function love.keyreleased(key, scan)
+  if apps[appManager[1]].code.keyRelease ~= nil then
+    apps[appManager[1]].code.keyRelease(key)
+  end
 end
