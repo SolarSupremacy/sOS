@@ -25,32 +25,42 @@ App development uses S-Code, which is just an easier way of saying environment-l
 > api.g.set(x, y, char)
 
 Inputs: 'x' and 'y' are the coordinates for the character, with (1, 1) being the top left. 'char' should be a single character.
+
 Result: 'char' is put onto that coordinate on the canvas to be rendered in the next draw(). Use in draw().
+
 Return: true
 
 > api.g.get(x, y)
 
 Inputs: 'x' and 'y' are the coordinates for the character, with (1, 1) being the top left.
+
 Result: Fetches the char at that coordinate from the last draw(). Use in tick().
+
 Return: string
 
 > api.g.text(x, y, str)
 
 Inputs: 'x' and 'y' are the coordinates for the start of the string, with (1, 1) being the top left. 'str' should be a string of one or more characters.
+
 Result: 'str' is put onto that coordinate on the canvas to be rendered in the next draw(). Use in draw().
+
 Return: true
 
 > api.g.box(x, y, w, h, adapt)
 
 Inputs: 'x' and 'y' are the coordinates for the start of the box, with (1, 1) being the top left. 'w' and 'h' are the width and height of the outside of the box, so the inside is 2 units less on each dimension. 'adapt' is a boolean for if the edges and corners of the box being drawn should automatically reformat to make grids or intersecting lines instead of overwriting the edges of other boxes.
+
 Result: Draws a rectangle out of ASCII characters. Adapt has special effects described above.
+
 Return: true
 
 # API.I - Input
 > api.i.keyStat(key)
 
 Inputs: 'key' is a string for the name of the key to be checked. For example, "a", "shift", "space".
+
 Result: Checks to see if the key is being pressed.
+
 Return: true if key is pressed, false otherwise.
 
 # Called Functions
