@@ -1,5 +1,5 @@
-# SolarOS
-sOS - The ASCII operating system nobody asked for.
+# Solar Operating System (sOS)
+The ASCII operating system nobody asked for.
 
 Join us on Discord! https://discord.gg/fpTu8Eb
 
