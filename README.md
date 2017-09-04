@@ -15,13 +15,13 @@ You need to have LOVE 2D installed to run sOS. If you have ZeroBrane IDE install
 
 # Controls
 Escape closes sOS.
-Tab switched active windows.
+Tab switches active windows.
 There are not yet controls to move windows around, at least they are automatically centered (you're welcome).
 
 # App Development Documentation
 App development uses S-Code, which is just an easier way of saying environment-limited Lua with sOS api. The link for the setup for the sandbox environment is here: https://hastebin.com/acolabiqez.lua You may use any Lua functions included in there, including the api functions at the bottom. This page will be updated as more features are implimented.
 
-# API.G - Graphcis
+# API.G - Graphics
 > api.g.set(x, y, char)
 
 Inputs: 'x' and 'y' are the coordinates for the character, with (1, 1) being the top left. 'char' should be a single character.
