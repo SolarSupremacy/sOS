@@ -22,6 +22,7 @@ Version: 0.0
 gra = require("os.lib.gra")
 app = require("os.lib.app")
 api = require("os.lib.api")
+lgc = require("os.lib.lgc")
 utf8 = require("utf8")
 
 function love.run()
@@ -73,7 +74,7 @@ function love.load()
   -- Loading Files
   mainFont = love.graphics.newFont("os/dat/cour.ttf")
   
-  systemApps = love.filesystem.getDirectoryItems("os/apps")
+  systemApps = love.filesystem.getDirectoryItems("os/sysapps")
   userApps = love.filesystem.getDirectoryItems("programs")
   
   -- Graphics
@@ -96,7 +97,7 @@ function love.load()
   
   -- Load Apps
   for k,v in pairs(systemApps) do
-    app.newTask("os/apps/"..v, "SYS")
+    app.newTask("os/sysapps/"..v, "SYS")
   end
   for k,v in pairs(userApps) do
     app.newTask("programs/"..v, "APP")

@@ -227,7 +227,7 @@ function gra.appSet(pid, x, y, str)
 end
 
 function gra.appSeto(pid, x, y, str)
-  gra.appSet(pid, x, y, gra.charCombine(gra.get(x, y), str))
+  gra.appSet(pid, x, y, gra.charCombine(gra.appGet(pid, x, y), str))
 end
 
 function gra.appGet(pid, x, y)

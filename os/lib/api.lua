@@ -40,7 +40,7 @@ end
 api.s = {}
 
 function api.s.appsTable()
-  return (apps)
+  return (lgc.copyTable(apps))
 end
 
 return (api)
