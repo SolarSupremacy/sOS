@@ -87,7 +87,8 @@ function app.newEnvironment(dir, pid)
         rad = math.rad, random = math.random, sin = math.sin, sinh = math.sinh, 
         sqrt = math.sqrt, tan = math.tan, tanh = math.tanh },
     os = { clock = os.clock, difftime = os.difftime, time = os.time },
-    api = { g = { set=api.g.set, get=api.g.get, text=api.g.text, box=api.g.box }}
+    api = { g = { set=api.g.set, get=api.g.get, text=api.g.text, box=api.g.box },
+      i = {keyStat=api.i.keyStat}}
   }
   
   -- Load app in environment

@@ -1,8 +1,8 @@
 local app = {}
 
--- Define global variables for you app here.
-testVal = 0
-text = ""
+-- Define global variables for your app here.
+
+
 function app.load()
   appInfo = {}
   -- Define values on load. "width" and "height" are for outer window dimentions.
@@ -18,8 +18,8 @@ end
 
 function app.tick()
   
-  -- Code here will be run every tick, or 1/60 of a second. 
-  testVal = testVal + 1
+  -- Code here will be run every tick (or 1/60 of a second). 
+  
   
 end
 
@@ -27,20 +27,13 @@ function app.draw()
   
   -- Code here will be run after every tick, and the app's canvas is cleared
   -- before this function, so all drawing must be done from here.
-  api.g.text(1,2,"This is an app coded only in test.lua")
-  api.g.text(1,3,"which is outside of all of the OS code.")
-  api.g.box(10,7,20,5,false)
-  api.g.text(12,9,"This is working!")
-  api.g.text(2,12,"Increments every tick: "..testVal)
-  api.g.box(3,13,34,3)
-  api.g.text(4+(testVal%32),14,"█")
-  api.g.text(1,1,text)
+  if api.i.keyStat("space") then
+    api.g.text(1,1,"You pressed space")
+  end
+  
 end
 
 -- Add more functions to do whatever you like down here.
-function app.textInput(char)
-  text = text..char
-end
 
 
 return (app)
