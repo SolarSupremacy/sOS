@@ -55,7 +55,7 @@ function app.newTask(dir, tag)
   
 end
 
-function app.newEnvironment(dir, pid)
+function app.newEnvironment(dir, pid, tag)
   
   -- Setup Sandbox Environment
   sandbox_env = {
@@ -90,6 +90,10 @@ function app.newEnvironment(dir, pid)
     api = { g = { set=api.g.set, get=api.g.get, text=api.g.text, box=api.g.box },
       i = {keyStat=api.i.keyStat}}
   }
+  
+  if (tag == "SYS") then
+    sandbox_env.api.s = {appsTable = api.s.appsTable}
+  end
   
   -- Load app in environment
   fnew = setfenv(assert(loadfile(dir, "bt")), sandbox_env)

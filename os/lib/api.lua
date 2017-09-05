@@ -2,6 +2,7 @@ local api = {}
 
 currentPID = 0
 
+-- Graphics
 api.g = {}
 
 function api.g.set(x, y, char)
@@ -28,10 +29,18 @@ function api.g.box(x, y, w, h, adapt)
   return (true)
 end
 
+-- Input
 api.i = {}
 
 function api.i.keyStat(key)
   return (love.keyboard.isDown(key))
+end
+
+-- System
+api.s = {}
+
+function api.s.appsTable()
+  return (apps)
 end
 
 return (api)
