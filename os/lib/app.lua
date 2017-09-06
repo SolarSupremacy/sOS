@@ -92,7 +92,6 @@ function app.newEnvironment(dir, pid)
   }
   
   if (apps[pid].tag == "SYS") then
-    print("run")
     sandbox_env.api.s = {appsTable = api.s.appsTable}
   end
   

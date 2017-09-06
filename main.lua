@@ -102,10 +102,10 @@ function love.load()
   
   -- Load Apps
   for k,v in pairs(systemApps) do
-    app.newTask("os/sysapps/"..v, "SYS")
+    app.newTask(love.filesystem.getSource( ).. "/os/sysapps/"..v, "SYS")
   end
   for k,v in pairs(userApps) do
-    app.newTask("programs/"..v, "APP")
+    app.newTask(love.filesystem.getSource( ).. "/programs/"..v, "APP")
   end
   
   
@@ -127,19 +127,21 @@ function love.update(dt)
   end
   
   -- Window Moving
-  if ticks % 2 == 0 then
-    local pid = appManager[1]
-    if love.keyboard.isDown("up") then
-      apps[pid].y = apps[pid].y - 1
-    end
-    if love.keyboard.isDown("down") then
-      apps[pid].y = apps[pid].y + 1
-    end
-    if love.keyboard.isDown("left") then
-      apps[pid].x = apps[pid].x - 1
-    end
-    if love.keyboard.isDown("right") then
-      apps[pid].x = apps[pid].x + 1
+  if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+    if ticks % 2 == 0 then
+      local pid = appManager[1]
+      if love.keyboard.isDown("up") then
+        apps[pid].y = apps[pid].y - 1
+      end
+      if love.keyboard.isDown("down") then
+        apps[pid].y = apps[pid].y + 1
+      end
+      if love.keyboard.isDown("left") then
+        apps[pid].x = apps[pid].x - 1
+      end
+      if love.keyboard.isDown("right") then
+        apps[pid].x = apps[pid].x + 1
+      end
     end
   end
   
@@ -189,6 +191,14 @@ function love.draw()
     gra.makeBoxAdapt(apps[pid].x, apps[pid].y, 5, 3)
     gra.makeBoxAdapt(apps[pid].x+4, apps[pid].y, apps[pid].width-4, 3)
     gra.makeBoxAdapt(apps[pid].x+4, apps[pid].y, apps[pid].width-4, 3)
+    if (pid == appManager[1]) then
+      sym = "█"
+      gra.set(apps[pid].x, apps[pid].y, sym)
+      gra.set(apps[pid].x+apps[pid].width-1, apps[pid].y, sym)
+      gra.set(apps[pid].x, apps[pid].y+apps[pid].height-1, sym)
+      gra.set(apps[pid].x+apps[pid].width-1, apps[pid].y+apps[pid].height-1, sym)
+    end
+    
     gra.text(apps[pid].x+1, apps[pid].y+1, apps[pid].tag)
     gra.text(apps[pid].x+6, apps[pid].y+1, apps[pid].title)
     
@@ -200,7 +210,6 @@ function love.draw()
         gra.set(j+apps[pid].x, i+apps[pid].y+2, gra.appGet(pid, j, i))
       end
     end
-    
   end
   
   -- Draw System Info
