@@ -2,6 +2,9 @@
 
 local gra = {}
 
+-- currentSetColor = 15
+-- currentPrintColor = 15
+
 function gra.setColor(x)
   
   local rgb = {255, 255, 255}
@@ -26,7 +29,38 @@ function gra.setColor(x)
   
 end
 
+--[[function gra.getColor(x)
+  
+  local rgb = {255, 255, 255}
+  if (x == 0) then rgb = {0, 0, 0}
+  elseif (x == 1) then rgb = {128, 0, 0}
+  elseif (x == 2) then rgb = {0, 128, 0}
+  elseif (x == 3) then rgb = {128, 128, 0}
+  elseif (x == 4) then rgb = {0, 0, 128}
+  elseif (x == 5) then rgb = {128, 0, 128}
+  elseif (x == 6) then rgb = {0, 128, 128}
+  elseif (x == 7) then rgb = {192, 192, 192}
+  elseif (x == 8) then rgb = {128, 128, 128}
+  elseif (x == 9) then rgb = {255, 0, 0}
+  elseif (x == 10) then rgb = {0, 255, 0}
+  elseif (x == 11) then rgb = {255, 255, 0}
+  elseif (x == 12) then rgb = {0, 0, 255}
+  elseif (x == 13) then rgb = {255, 0, 255}
+  elseif (x == 14) then rgb = {0, 255, 255}
+  else rgb = {255, 255, 255} end
+  
+  currentPrintColor = x
+  
+  return (rgb)
+  
+end]]
+
+function gra.color(color)
+  currentSetColor = color
+end
+
 function gra.set(x, y, str)
+  --color = color or 15
   if (y > #printOut) or (x > #printOut[1]) then
     return
   end
@@ -34,6 +68,7 @@ function gra.set(x, y, str)
     return
   end
   printOut[y][x] = str
+  --colorOut[y][x] = currentSetColor
 end
 
 function gra.get(x, y)
@@ -214,6 +249,14 @@ function gra.appCanvasReset(pid)
     end
   end
   
+  --[[apps[pid].canvasColor = {}
+  for i=1, textGrid.height do
+    apps[pid].canvasColor[i] = {}
+    for j=1, textGrid.width do
+      apps[pid].canvasColor[i][j] = 15
+    end
+  end]]
+  
 end
 
 function gra.appSet(pid, x, y, str)
@@ -224,6 +267,7 @@ function gra.appSet(pid, x, y, str)
     return
   end
   apps[pid].canvas[y][x] = str
+  --apps[pid].canvasColor[y][x] = currentSetColor
 end
 
 function gra.appSeto(pid, x, y, str)
