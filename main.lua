@@ -214,6 +214,7 @@ function love.draw()
   
   -- Draw System Info
   --gra.setColor(15)
+  gra.setArea(textGrid.width-11, 1, 12, 7, " ")
   gra.makeBox(textGrid.width-11, 1, 12, 3)
   gra.makeBoxAdapt(textGrid.width-11, 3, 12, 3)
   gra.makeBoxAdapt(textGrid.width-11, 5, 12, 3)

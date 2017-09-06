@@ -229,13 +229,13 @@ function gra.text(x, y, str)
   end
 end
 
-
-
-
-
-
-
-
+function gra.setArea(x, y, w, h, str)
+  for i=1, h do
+    for j=1, w do
+      gra.set(x+j-1, y+i-1, str)
+    end
+  end
+end
 
 -- App Functions
 
