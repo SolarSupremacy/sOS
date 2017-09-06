@@ -9,18 +9,12 @@ appManager = {}
 function app.newTask(dir, tag)
   
   -- Getting lowest unused PID.
-  local pid
-  local running
-  local good
-  running = true
-  pid = 0
-  while running do
+  local pid = 0 -- Thanks blueshaman#1784 @ Discord
+  while true do
     pid = pid + 1
-    good = true
-    for k,v in pairs(apps) do
-      if (k==pid) then good = false end
+    if apps[pid] == nil then
+      break
     end
-    if good then running = false end
   end
   
   -- Creating app in table apps.
@@ -58,7 +52,7 @@ end
 function app.newEnvironment(dir, pid)
   
   -- Setup Sandbox Environment
-  sandbox_env = {
+  local sandbox_env = {
     ipairs = ipairs,
     next = next,
     pairs = pairs,

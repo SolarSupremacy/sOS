@@ -55,9 +55,9 @@ end
   
 end]]
 
-function gra.color(color)
+--[[function gra.color(color)
   currentSetColor = color
-end
+end]]
 
 function gra.set(x, y, str)
   --color = color or 15

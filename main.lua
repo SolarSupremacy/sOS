@@ -72,10 +72,10 @@ end
 function love.load()
   
   -- Loading Files
-  mainFont = love.graphics.newFont("os/dat/cour.ttf")
+  local mainFont = love.graphics.newFont("os/dat/cour.ttf")
   
-  systemApps = love.filesystem.getDirectoryItems("os/sysapps")
-  userApps = love.filesystem.getDirectoryItems("programs")
+  local systemApps = love.filesystem.getDirectoryItems("os/sysapps")
+  local userApps = love.filesystem.getDirectoryItems("programs")
   
   -- Graphics
   love.graphics.setBackgroundColor(0, 0, 0)
@@ -147,12 +147,12 @@ function love.update(dt)
   
   -- Process processor for processing processes
   for pid,v in pairs(apps) do
+    -- ID for graphics functions to handle
     currentPID = pid
     
     -- Run the app
-    --testing = os.clock()
     apps[pid].code.tick()
-    --print (apps[pid].title, os.clock() - testing, os.clock())
+    
     -- Make sure the app is within the screen
     if apps[pid].x < 1 then apps[pid].x = 1 end
     if apps[pid].y < 1 then apps[pid].y = 1 end
