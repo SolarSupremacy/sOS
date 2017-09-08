@@ -238,7 +238,8 @@ function love.draw()
   
   -- **** ALTERNATE PRINT METHODS FOR COLOR! NEEDS OPTIMIZATION! ****
   
-  --[[for i=1, textGrid.height do
+  --[[
+  for i=1, textGrid.height do
     line = ""
     start = 0
     for j=1, textGrid.width do
@@ -264,9 +265,11 @@ function love.draw()
       
     end
     
-  end]]
+  end
+  --]]
   
-  --[[finalPrint = {gra.getColor(15)}
+  --[[
+  finalPrint = {gra.getColor(15)}
   text = ""
   currentPrintColor = -1
   for i=1, #printOut do
@@ -286,9 +289,11 @@ function love.draw()
     text = text .. "\n"
   end
   table.insert(finalPrint, text)
-  love.graphics.print(finalPrint ,textGrid.widthbuffer, textGrid.heightbuffer)]]
+  love.graphics.print(finalPrint ,textGrid.widthbuffer, textGrid.heightbuffer)
+  --]]
   
-  --[[colorPrints = {}
+  --[[
+  colorPrints = {}
   for i=0, 15 do
     colorPrints[i] = {}
   end
@@ -320,7 +325,8 @@ function love.draw()
     love.graphics.print(table.concat(colorPrints[i]), textGrid.widthbuffer, textGrid.heightbuffer)
     
     
-  end]]
+  end
+  --]]
   
 end
 
