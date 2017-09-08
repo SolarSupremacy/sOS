@@ -29,9 +29,11 @@ function api.g.box(x, y, w, h, adapt)
   return (true)
 end
 
---[[function api.g.color(color)
+---[[
+function api.g.color(color)
   gra.color(color)
-end]]
+end
+--]]
 
 -- Input
 api.i = {}
