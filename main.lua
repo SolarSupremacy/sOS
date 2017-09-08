@@ -25,6 +25,8 @@ api = require("os.lib.api")
 lgc = require("os.lib.lgc")
 utf8 = require("utf8")
 
+local gra, app, api, lgc, utf8, love = gra, app, api, lgc, utf8, love
+
 function love.run()
   
 	if love.math then
