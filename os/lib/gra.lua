@@ -54,6 +54,8 @@ end
 --]]
 
 function gra.set(x, y, str)
+  
+  if str == "\n" or str == "\t" then str = " " end
   --color = color or 15
   if (y > #printOut) or (x > #printOut[1]) then
     return
