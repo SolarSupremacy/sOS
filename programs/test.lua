@@ -1,18 +1,16 @@
 local app = {}
 
--- Define global variables for your app here.
-
-
 function app.load()
+  
+  -- Define values on load.
+  -- "title" is the text of the window, "mini" is if the app is minimized.
   appInfo = {}
-  -- Define values on load. "width" and "height" are for outer window dimentions.
-  -- For reference, inner window dimentions are 4 shorter and 2 thinner.
-  -- Example: outer width 40 and height 20 makes inner width 38 and height 16.
-  -- "title" is the text at the top of the window, "mini" is if the app is minimized.
-  appInfo.width = 60
-  appInfo.height = 21
   appInfo.title = "Space Detector"
   appInfo.mini = false
+  
+  -- Define global variables here.
+  
+  
   return (appInfo)
 end  
 
@@ -23,17 +21,14 @@ function app.tick()
   
 end
 
-function app.draw()
+function app.draw(width, height)
   
-  -- Code here will be run after every tick, and the app's canvas is cleared
-  -- before this function, so all drawing must be done from here.
-  if api.i.keyStat("space") then
-    api.g.text(1,1,"You pressed space")
-  end
+  -- Code here to draw on the canvas.
+  
   
 end
 
--- Add more functions to do whatever you like down here.
+-- Add more functions below, but they must be formatted 'app.<name>'.
 
 
 return (app)

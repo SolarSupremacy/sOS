@@ -1,24 +1,34 @@
-# Solar Operating System (sOS)
+# Solar Operating System (sOS) - 0.1
 The ASCII operating system nobody asked for.
 
 Join us on Discord! https://discord.gg/fpTu8Eb
 
-# What is sOS (and other Q&A)
-sOS is a simulation of a text-based OS written in Lua with the help of LÖVE 2D. Other apps can also be loaded, allowing you to develop or download anything you can imagine and run it in sOS!
-
-* Q. Uh... why would anyone make a simulated OS in Lua on another OS? A. Uh... why not?
-
-* Q. What game starting with TIS and ending with 100 inspired you to make this? A. Yes.
+# What is sOS?
+sOS is a simulation of a text-based OS written in Lua with the help of LÖVE 2D. Apps can also be loaded, allowing you to develop or download anything you can imagine and run it in sOS! This is completely safe for you as a user to download random lua scripts on the internet and throw them in /programs/ because all apps are loaded in a sandboxed environment. The apps only get access to math functions, the sOS api, and a few other utilities.
 
 # How to run sOS
 You need to have LOVE 2D installed to run sOS. If you have ZeroBrane IDE installed, you can open sOS as a project, go to Project > Lua Interpreter and set it to LOVE, then use F6 to execute. Otherwise, drag the *folder* that sOS is in onto 'love.exe'.
 
+# New Version News - 0.1
+0.1 is our first major-ish milestone. It feels weird calling it that because sOS is still a buggy-as-hell text based pseudo operating system written in Lua, but it's here. Apps can now be loaded, closed, we have a new and slightly more optimised method of rendering. Now, you have one app which is pretty much fullscreened in the middle of the screen and a sidebar on each side displaying current running apps and other system information. We've got a long way to go, but for a project that started less than a week ago (yeah, I know... o_O) we've made it pretty far.
+
+Stay tuned!
+
 # Controls
-Escape closes sOS.
 
-Ctrl + Tab switches active windows.
+*On the Left...*
 
-Ctrl + Arrow Keys moves active window around.
+**Tab** (or **Shift + Tab**) cycles through open apps. Even when apps are open, you can cycle through the 'no app' entry, making all apps run in the background.
+
+**Escape** closes the currentlty selected app. If no app is selected (described above), Escape closes sOS.
+
+*On the Right...*
+
+**Page Up** and **Page Down** cycle through the apps detected. The selected app has a '>' next to it.
+
+**End** switches between selecting system apps (on the top) and user apps (on the bottom).
+
+**Home** starts a new process with the app selected.
 
 # App Development Documentation
 App development uses S-Code, which is just an easier way of saying environment-limited Lua with sOS api. The link for the setup for the sandbox environment is here: https://hastebin.com/acolabiqez.lua You may use any Lua functions included in there, including the api functions at the bottom. This page will be updated as more features are implimented.
@@ -61,33 +71,54 @@ Return: true
 
 Inputs: 'key' is a string for the name of the key to be checked. For example, "a", "shift", "space".
 
-Result: Checks to see if the key is being pressed.
+Result: Checks to see if the key is being pressed. Will not detect keys if not active app.
 
 Return: true if key is pressed, false otherwise.
+
+# API.S - System (only avaliable to system apps, which you can also develop if you wish)
+> api.s.appsTable()
+
+Inputs: Nothing.
+
+Result: Returns (a deep copy of) the table of apps. This is a bit more complicated and will be documented on the wiki later.
+
+Return: apps (Table)
 
 # Called Functions
 The following functions are called by sOS. This is also the order in which they are called, so code accordingly.
 
-load() - Called once on load. Should contain information about the app.
+> load()
 
-textInput(char) - Optional. 'char' is a character typed and formatted correctly. For example, if you hold 'shift' and hit 'a', this function will call with the argument 'A'. Useful for easy typing.
+Called once on load. Should contain information about the app.
 
-keyPress(key, rep) - Optional. 'key' is the name of a key. 'rep' is if the call is because of the key being repeated without releasing it, just like if you hold a key in a chat box and it types one letter, pauses, and then repeats that character. This is defined by your actual operating system and can be ignored by ignoring the call if 'rep' is true.
+> textInput(char)
 
-keyRelease(key) - Optional. 'key' is the name of a key. This function is called if a key is released.
+Optional. 'char' is a character typed and formatted correctly. For example, if you hold 'shift' and hit 'a', this function will call with the argument 'A'. Useful for easy typing.
 
-tick() - Called every tick. Still has access to last cycle's canvas, so api.g.get() will still work.
+> keyPress(key, rep)
+
+Optional. 'key' is the name of a key. 'rep' is if the call is because of the key being repeated without releasing it, just like if you hold a key in a chat box and it types one letter, pauses, and then repeats that character. This is defined by your actual operating system and can be ignored by ignoring the call if 'rep' is true.
+
+> keyRelease(key)
+
+Optional. 'key' is the name of a key. This function is called if a key is released.
+
+> tick()
+
+Called every tick. Still has access to last cycle's canvas, so api.g.get() will still work.
 
 *The canvas is reset after tick() and before draw().*
 
-draw() - Called after every tick. Now is the time to draw things onto the canvas to display.
+> draw(width, height)
+
+Called after every tick. Now is the time to draw things onto the canvas to display. 'width' and 'height' are arguments for the current canvas width and height.
 
 # App Template and Other Information
 
-This is a template: https://hastebin.com/lukupububu.lua
+This is a template: https://hastebin.com/iqukigiril.lua
 It doesn't do anything but set up the app.
 
 The app must start with 'local app = {}' and end with 'return (app)'.
 All functions must start with 'app.', such as 'app.load()' or 'app.customFunction()'.
 
-Apps must be placed into the /programs/ folder of sOS. They will be automatically loaded and executed.
+Apps must be placed into the /programs/ folder of sOS. They will be automatically be detected.
