@@ -2,57 +2,47 @@
 
 local gra = {}
 
+
+-- Convert color code (0-15) to RGB values
+local function _colorcodeToRGB(x)
+  if (x == 0)      then return 0,   0,   0
+  elseif (x == 1)  then return 128, 0,   0
+  elseif (x == 2)  then return 0,   128, 0
+  elseif (x == 3)  then return 128, 128, 0
+  elseif (x == 4)  then return 0,   0,   128
+  elseif (x == 5)  then return 128, 0,   128
+  elseif (x == 6)  then return 0,   128, 128
+  elseif (x == 7)  then return 192, 192, 192
+  elseif (x == 8)  then return 128, 128, 128
+  elseif (x == 9)  then return 255, 0,   0
+  elseif (x == 10) then return 0,   255, 0
+  elseif (x == 11) then return 255, 255, 0
+  elseif (x == 12) then return 0,   0,   255
+  elseif (x == 13) then return 255, 0,   255
+  elseif (x == 14) then return 0,   255, 255
+  else                  return 255, 255, 255
+  end
+end
+
+
 -- currentSetColor = 15
 -- currentPrintColor = 15
 
 function gra.setColor(x)
-  
-  local rgb = {255, 255, 255}
-  if (x == 0) then rgb = {0, 0, 0}
-  elseif (x == 1) then rgb = {128, 0, 0}
-  elseif (x == 2) then rgb = {0, 128, 0}
-  elseif (x == 3) then rgb = {128, 128, 0}
-  elseif (x == 4) then rgb = {0, 0, 128}
-  elseif (x == 5) then rgb = {128, 0, 128}
-  elseif (x == 6) then rgb = {0, 128, 128}
-  elseif (x == 7) then rgb = {192, 192, 192}
-  elseif (x == 8) then rgb = {128, 128, 128}
-  elseif (x == 9) then rgb = {255, 0, 0}
-  elseif (x == 10) then rgb = {0, 255, 0}
-  elseif (x == 11) then rgb = {255, 255, 0}
-  elseif (x == 12) then rgb = {0, 0, 255}
-  elseif (x == 13) then rgb = {255, 0, 255}
-  elseif (x == 14) then rgb = {0, 255, 255}
-  else rgb = {255, 255, 255} end
-  
-  love.graphics.setColor(rgb[1], rgb[2], rgb[3])
+  local r, g, b = _colorcodeToRGB(x)
+  love.graphics.setColor(r, g, b)
   
 end
 
 --[[
 function gra.getColor(x)
   
-  local rgb = {255, 255, 255}
-  if (x == 0) then rgb = {0, 0, 0}
-  elseif (x == 1) then rgb = {128, 0, 0}
-  elseif (x == 2) then rgb = {0, 128, 0}
-  elseif (x == 3) then rgb = {128, 128, 0}
-  elseif (x == 4) then rgb = {0, 0, 128}
-  elseif (x == 5) then rgb = {128, 0, 128}
-  elseif (x == 6) then rgb = {0, 128, 128}
-  elseif (x == 7) then rgb = {192, 192, 192}
-  elseif (x == 8) then rgb = {128, 128, 128}
-  elseif (x == 9) then rgb = {255, 0, 0}
-  elseif (x == 10) then rgb = {0, 255, 0}
-  elseif (x == 11) then rgb = {255, 255, 0}
-  elseif (x == 12) then rgb = {0, 0, 255}
-  elseif (x == 13) then rgb = {255, 0, 255}
-  elseif (x == 14) then rgb = {0, 255, 255}
-  else rgb = {255, 255, 255} end
+  local r, g, b = _colorcodeToRGB(x)
+  love.graphics.setColor(r, g, b)
   
   currentPrintColor = x
   
-  return (rgb)
+  return {r, g, b}
   
 end
 --]]
@@ -79,98 +69,89 @@ function gra.get(x, y)
   return (printOut[y][x])
 end
 
-function gra.charCombine(stri, strf)
-  up = false
-  down = false
-  right = false
-  left = false
-  
-  if (stri == "║") then up = true; down = true
-  elseif (stri == "═") then right = true; left = true
-  elseif (stri == "╚") then up = true; right = true
-  elseif (stri == "╝") then up = true; left = true
-  elseif (stri == "╗") then left = true; down = true
-  elseif (stri == "╔") then right = true; down = true
-  elseif (stri == "╠") then up = true; down = true; right = true
-  elseif (stri == "╣") then up = true; down = true; left = true
-  elseif (stri == "╩") then up = true; right = true; left = true
-  elseif (stri == "╦") then down = true; right = true; left = true
-  elseif (stri == "╬") then up = true; down = true; right = true; left = true
-  end
-    
-  if (strf == "║") then up = true; down = true
-  elseif (strf == "═") then right = true; left = true
-  elseif (strf == "╚") then up = true; right = true
-  elseif (strf == "╝") then up = true; left = true
-  elseif (strf == "╗") then left = true; down = true
-  elseif (strf == "╔") then right = true; down = true
-  elseif (strf == "╠") then up = true; down = true; right = true
-  elseif (strf == "╣") then up = true; down = true; left = true
-  elseif (strf == "╩") then up = true; right = true; left = true
-  elseif (strf == "╦") then down = true; right = true; left = true
-  elseif (strf == "╬") then up = true; down = true; right = true; left = true
-  end
 
+local function _textBarToDirections(bar)
+  local up, down, right, left = false, false, false, false
+  if (bar == "║") then up = true; down = true
+  elseif (bar == "═") then right = true; left = true
+  elseif (bar == "╚") then up = true; right = true
+  elseif (bar == "╝") then up = true; left = true
+  elseif (bar == "╗") then left = true; down = true
+  elseif (bar == "╔") then right = true; down = true
+  elseif (bar == "╠") then up = true; down = true; right = true
+  elseif (bar == "╣") then up = true; down = true; left = true
+  elseif (bar == "╩") then up = true; right = true; left = true
+  elseif (bar == "╦") then down = true; right = true; left = true
+  elseif (bar == "╬") then up = true; down = true; right = true; left = true
+  end
+end
+
+function gra.charCombine(stri, strf)
+  local u1, d1, r1, l1 = _textBarToDirections(stri)
+  local u2, d2, r2, l2 = _textBarToDirections(stri)
+  local up, down, right, left = u1 or u2, d1 or d2, r1 or r2, l1 or l2
+  
+  -- drastically increased indentation here for easier readbility
   if up then
-    if down then
-      if right then
-        if left then
-          return ("╬")
+        if down then
+            if right then
+                if left then
+                    return ("╬")
+                else
+                    return ("╠")
+                end
+            else
+                if left then
+                    return ("╣")
+                else
+                    return ("║")
+                end
+            end
         else
-          return ("╠")
+            if right then
+                if left then
+                    return ("╩")
+                else
+                    return ("╚")
+                end
+            else
+                if left then
+                    return ("╝")
+                else
+                    return ("#")
+                end
+            end
         end
-      else
-        if left then
-          return ("╣")
-        else
-          return ("║")
-        end
-      end
     else
-      if right then
-        if left then
-          return ("╩")
+        if down then
+            if right then
+                if left then
+                    return ("╦")
+                else
+                    return ("╔")
+                end
+            else
+                if left then
+                    return ("╗")
+                else
+                    return ("@")
+                end
+            end
         else
-          return ("╚")
+            if right then
+                if left then
+                    return ("═")
+                else
+                    return ("%")
+                end
+            else
+                if left then
+                    return ("&")
+                else
+                    return (" ")
+                end
+            end
         end
-      else
-        if left then
-          return ("╝")
-        else
-          return ("#")
-        end
-      end
-    end
-  else
-    if down then
-      if right then
-        if left then
-          return ("╦")
-        else
-          return ("╔")
-        end
-      else
-        if left then
-          return ("╗")
-        else
-          return ("@")
-        end
-      end
-    else
-      if right then
-        if left then
-          return ("═")
-        else
-          return ("%")
-        end
-      else
-        if left then
-          return ("&")
-        else
-          return (" ")
-        end
-      end
-    end
   end
   
 end
