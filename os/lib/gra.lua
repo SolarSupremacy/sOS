@@ -243,100 +243,100 @@ end
 
 -- App Functions
 
-function gra.appCanvasReset(pid)
+function gra.appCanvasReset(pen)
   
-  apps[pid].canvas = {}
-  for i=1, textGrid.height do
-    apps[pid].canvas[i] = {}
-    for j=1, textGrid.width do
-      apps[pid].canvas[i][j] = " "
+  apps[pen].canvas = {}
+  for i=1, grid.height do
+    apps[pen].canvas[i] = {}
+    for j=1, grid.width - 66 do
+      apps[pen].canvas[i][j] = " "
     end
   end
   
   --[[
-  apps[pid].canvasColor = {}
-  for i=1, textGrid.height do
-    apps[pid].canvasColor[i] = {}
-    for j=1, textGrid.width do
-      apps[pid].canvasColor[i][j] = 15
+  apps[pen].canvasColor = {}
+  for i=1, grid.height do
+    apps[pen].canvasColor[i] = {}
+    for j=1, grid.width do
+      apps[pen].canvasColor[i][j] = 15
     end
   end
   --]]
   
 end
 
-function gra.appSet(pid, x, y, str)
-  if (y > #apps[pid].canvas) or (x > #apps[pid].canvas[1]) then
+function gra.appSet(pen, x, y, str)
+  if (y > #apps[pen].canvas) or (x > #apps[pen].canvas[1]) then
     return
   end
   if (y < 1) or (x < 1) then
     return
   end
-  apps[pid].canvas[y][x] = str
+  apps[pen].canvas[y][x] = str
   --[[
-  apps[pid].canvasColor[y][x] = currentSetColor
+  apps[pen].canvasColor[y][x] = currentSetColor
   --]]
 end
 
-function gra.appSeto(pid, x, y, str)
-  gra.appSet(pid, x, y, gra.charCombine(gra.appGet(pid, x, y), str))
+function gra.appSeto(pen, x, y, str)
+  gra.appSet(pen, x, y, gra.charCombine(gra.appGet(pen, x, y), str))
 end
 
-function gra.appGet(pid, x, y)
-  return (apps[pid].canvas[y][x])
+function gra.appGet(pen, x, y)
+  return (apps[pen].canvas[y][x])
 end
 
-function gra.appMakeBox(pid, x, y, w, h)
-  gra.appSet(pid, x, y, "╔")
-  gra.appSet(pid, x+w-1, y, "╗")
-  gra.appSet(pid, x, y+h-1, "╚")
-  gra.appSet(pid, x+w-1, y+h-1, "╝")
+function gra.appMakeBox(pen, x, y, w, h)
+  gra.appSet(pen, x, y, "╔")
+  gra.appSet(pen, x+w-1, y, "╗")
+  gra.appSet(pen, x, y+h-1, "╚")
+  gra.appSet(pen, x+w-1, y+h-1, "╝")
   
   for i=1, w-2 do
-    gra.appSet(pid, x+i, y, "═")
-    gra.appSet(pid, x+i, y+h-1, "═")
+    gra.appSet(pen, x+i, y, "═")
+    gra.appSet(pen, x+i, y+h-1, "═")
   end
   
   for i=1, h-2 do
-    gra.appSet(pid, x, y+i, "║")
-    gra.appSet(pid, x+w-1, y+i, "║")
+    gra.appSet(pen, x, y+i, "║")
+    gra.appSet(pen, x+w-1, y+i, "║")
   end
   
   for i=1, w-2 do
     for j=1, h-2 do
-      gra.appSet(pid, x+i, y+j, " ")
+      gra.appSet(pen, x+i, y+j, " ")
     end
   end
   
 end
 
-function gra.appMakeBoxAdapt(pid, x, y, w, h)
-  gra.appSeto(pid, x, y, "╔")
-  gra.appSeto(pid, x+w-1, y, "╗")
-  gra.appSeto(pid, x, y+h-1, "╚")
-  gra.appSeto(pid, x+w-1, y+h-1, "╝")
+function gra.appMakeBoxAdapt(pen, x, y, w, h)
+  gra.appSeto(pen, x, y, "╔")
+  gra.appSeto(pen, x+w-1, y, "╗")
+  gra.appSeto(pen, x, y+h-1, "╚")
+  gra.appSeto(pen, x+w-1, y+h-1, "╝")
   
   for i=1, w-2 do
-    gra.appSeto(pid, x+i, y, "═")
-    gra.appSeto(pid, x+i, y+h-1, "═")
+    gra.appSeto(pen, x+i, y, "═")
+    gra.appSeto(pen, x+i, y+h-1, "═")
   end
   
   for i=1, h-2 do
-    gra.appSeto(pid, x, y+i, "║")
-    gra.appSeto(pid, x+w-1, y+i, "║")
+    gra.appSeto(pen, x, y+i, "║")
+    gra.appSeto(pen, x+w-1, y+i, "║")
   end
   
   for i=1, w-2 do
     for j=1, h-2 do
-      gra.appSeto(pid, x+i, y+j, " ")
+      gra.appSeto(pen, x+i, y+j, " ")
     end
   end
   
 end
 
-function gra.appText(pid, x, y, str)
+function gra.appText(pen, x, y, str)
   for i=1, utf8.len(str) do
-    gra.appSet(pid, x+i-1, y, string.sub(str, utf8.offset(str, i), utf8.offset(str, i+1)-1))
+    gra.appSet(pen, x+i-1, y, string.sub(str, utf8.offset(str, i), utf8.offset(str, i+1)-1))
   end
 end
 

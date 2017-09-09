@@ -5,12 +5,10 @@ local app = {}
 
 function app.load()
   appInfo = {}
-  -- Define values on load. "width" and "height" are for outer window dimentions.
+  -- Define values on load.
   -- For reference, inner window dimentions are 4 shorter and 2 thinner.
   -- Example: outer width 40 and height 20 makes inner width 38 and height 16.
   -- "title" is the text at the top of the window, "mini" is if the app is minimized.
-  appInfo.width = 58
-  appInfo.height = 28
   appInfo.title = "Task Manager"
   appInfo.mini = false
   return (appInfo)
@@ -22,7 +20,7 @@ function app.tick()
   
 end
 
-function app.draw()
+function app.draw(width, height)
   
   api.g.box(1, 1, 56, 3, false)
   api.g.box(7, 1, 7, 3, true)
@@ -30,12 +28,13 @@ function app.draw()
   
   api.g.text(3, 2, "PID")
   api.g.text(9, 2, "TAG")
-  api.g.text(15, 2, "PROCESS NAME")
+  api.g.text(width - 11, 2, "PROCESS NAME")
   api.g.text(50, 2, "MINI.")
   
   api.g.box(1, 3, 56, 22, true)
   api.g.box(7, 3, 7, 22, true)
   api.g.box(48, 3, 9, 22, true)
+  
   
   local i = 1
   for pid,v in pairs(at) do
