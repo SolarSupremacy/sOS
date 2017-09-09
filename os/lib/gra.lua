@@ -83,9 +83,9 @@ local function _textBarToDirections(bar)
   elseif (bar == "╩") then up = true; right = true; left = true
   elseif (bar == "╦") then down = true; right = true; left = true
   elseif (bar == "╬") then up = true; down = true; right = true; left = true
-end
+  end
 
-return up, down, right, left
+  return up, down, right, left
 end
 
 function gra.charCombine(stri, strf)
