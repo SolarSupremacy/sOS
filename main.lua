@@ -76,8 +76,8 @@ function love.load()
   -- Loading Files
   local mainFont = love.graphics.newFont("os/dat/cour.ttf")
   
-  local systemApps = love.filesystem.getDirectoryItems("os/sysapps")
-  local userApps = love.filesystem.getDirectoryItems("programs")
+  systemApps = love.filesystem.getDirectoryItems("os/sysapps")
+  userApps = love.filesystem.getDirectoryItems("programs")
   
   -- Graphics
   love.graphics.setBackgroundColor(0, 0, 0)
@@ -103,13 +103,20 @@ function love.load()
   grid.fontheight = fontHeight
   
   -- Load Apps
+  --[[
   for k,v in ipairs(systemApps) do
     app.newTask(love.filesystem.getSource( ).. "/os/sysapps/"..v, "SYS")
   end
   for k,v in ipairs(userApps) do
     app.newTask(love.filesystem.getSource( ).. "/programs/"..v, "APP")
   end
+  --]]
   
+  state = {}
+  state.activePEN = 0
+  state.currentPEN = 0
+  state.selectType = 1
+  state.selectNum = 1
   
 end
 
@@ -118,15 +125,6 @@ function love.update(dt)
   ticks = ticks + 1
   
   -- OS Controls
-  if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
-    if love.keyboard.isDown("escape") then
-      love.event.quit()
-    end
-  end
-  
-  if love.keyboard.isDown("escape") then
-    love.event.quit()
-  end
   
   --[[ Window Moving
   if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
@@ -151,7 +149,7 @@ function love.update(dt)
   -- Process processor for processing processes
   for pen,v in pairs(apps) do
     -- ID for graphics functions to handle
-    currentpen = pen
+    state.currentPEN = pen
     
     -- Run the app
     apps[pen].code.tick()
@@ -178,10 +176,10 @@ function love.draw()
   
   
   -- Draw Apps
-  if activeApp ~= 0 then
-    pen = activeApp
+  if state.activePEN ~= 0 then
+    pen = state.activePEN
 
-    currentpen = pen
+    state.currentPEN = pen
     apps[pen].code.draw(grid.width-66, grid.height)
 
     for i=1, grid.height do
@@ -196,6 +194,23 @@ function love.draw()
   gra.setArea(32, 1, 1, grid.height, "-")
   gra.setArea(grid.width-31, 1, 1, grid.height, "-")
   
+  gra.makeBox(grid.width-29, 20, 30, #systemApps+2)
+  for k,v in ipairs(systemApps) do
+    if (state.selectType == 1) and (state.selectNum == k) then
+      gra.text(grid.width-27, 20+k, ">")
+    end
+    gra.text(grid.width-25, 20+k, v)
+  end
+  
+  gra.makeBox(grid.width-29, 20+#systemApps+2, 30, #userApps+2)
+  for k,v in ipairs(userApps) do
+    if (state.selectType == 2) and (state.selectNum == k) then
+      gra.text(grid.width-27, 20+k+#systemApps+2, ">")
+    end
+    gra.text(grid.width-25, 20+k+#systemApps+2, v)
+  end
+  
+  
   gra.makeBox(1, 1, 30, grid.height)
   for k,v in ipairs(apps) do
     gra.makeBoxAdapt(1, 1+(k-1)*4, 30, 5)
@@ -203,8 +218,8 @@ function love.draw()
     gra.text(26, 2+(k-1)*4, v.tag)
     gra.text(3, 3+(k-1)*4, "PID: " .. v.pid)
     
-    if k == activeApp then
-      gra.text(10, 4+(k-1)*4, ">> ACTIVE <<")
+    if k == state.activePEN then
+      gra.text(20, 3+(k-1)*4, ">>>>>>")
     end
     
   end
@@ -328,8 +343,8 @@ end
 function love.textinput(char)
   
   -- App Controls
-  if activeApp ~= 0 and apps[activeApp].code.textInput ~= nil then
-    apps[activeApp].code.textInput(char)
+  if state.activePEN ~= 0 and apps[state.activePEN].code.textInput ~= nil then
+    apps[state.activePEN].code.textInput(char)
   end
 end
 
@@ -337,17 +352,58 @@ function love.keypressed(key, scan, rep)
   
   -- OS Controls
   if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") or true then
+    
     if key == "tab" then
-      activeApp = activeApp + 1
-      if activeApp > #apps then
-        activeApp = 1
+      if love.keyboard.isDown("lshift") then
+        state.activePEN = (state.activePEN - 1) % (#apps + 1)
+      else
+        state.activePEN = (state.activePEN + 1) % (#apps + 1)
+      end
+        
+    end
+    
+    if key == "escape" then
+      if state.activePEN == 0 then
+        love.event.quit()
+      elseif state.activePEN <= #apps then
+        app.endTask(state.activePEN)
+        if state.activePEN > #apps then state.activePEN = #apps end
+      end
+    end
+    
+    if key == "end" then
+      state.selectType = (state.selectType) % 2 + 1
+      state.selectNum = 1
+    end
+    
+    if key == "pageup" then
+      if state.selectType == 1 then
+        state.selectNum = (state.selectNum - 2) % #systemApps + 1
+      elseif state.selectType == 2 then
+        state.selectNum = (state.selectNum - 2) % #userApps + 1
+      end
+    end
+    
+    if key == "pagedown" then
+      if state.selectType == 1 then
+        state.selectNum = (state.selectNum) % #systemApps + 1
+      elseif state.selectType == 2 then
+        state.selectNum = (state.selectNum) % #userApps + 1
+      end
+    end
+    
+    if key == "home" then
+      if state.selectType == 1 then
+        app.newTask(love.filesystem.getSource( ).. "/os/sysapps/"..systemApps[state.selectNum], "SYS")
+      elseif state.selectType == 2 then
+        app.newTask(love.filesystem.getSource( ).. "/programs/"..userApps[state.selectNum], "APP")
       end
     end
   end
 
   -- App Controls
-  if activeApp ~= 0 and apps[activeApp].code.keyPress ~= nil then
-    apps[activeApp].code.keyPress(key, rep)
+  if state.activePEN ~= 0 and apps[state.activePEN].code.keyPress ~= nil then
+    apps[state.activePEN].code.keyPress(key, rep)
   end
   
 end
@@ -355,7 +411,7 @@ end
 function love.keyreleased(key, scan)
   
   -- App Controls
-  if activeApp ~= 0 and apps[activeApp].code.keyRelease ~= nil then
-    apps[activeApp].code.keyRelease(key)
+  if state.activePEN ~= 0 and apps[state.activePEN].code.keyRelease ~= nil then
+    apps[state.activePEN].code.keyRelease(key)
   end
 end

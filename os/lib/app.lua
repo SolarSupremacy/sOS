@@ -4,8 +4,6 @@ local app = {}
 
 apps = {}
 
-activeApp = 0
-
 function app.newTask(dir, tag)
   
   -- Generating new 1000 - 9999 PID
@@ -44,6 +42,10 @@ function app.newTask(dir, tag)
   
   print("New Task Created. "..pid.." - "..apps[pen].title)
   
+end
+
+function app.endTask(pen)
+  table.remove(apps, pen)
 end
 
 function app.newEnvironment(dir, pen)
