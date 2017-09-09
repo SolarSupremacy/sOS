@@ -193,10 +193,22 @@ function love.draw()
   
   -- Draw System Info
   --gra.setColor(15)
-  gra.setArea(1, 1, 32, grid.height, "#")
-  gra.setArea(grid.width-31       , 1, 32, grid.height, "#")
-  gra.text(3,     3, apps[pen].tag)
-  gra.text(3, 5, apps[pen].title)
+  gra.setArea(32, 1, 1, grid.height, "-")
+  gra.setArea(grid.width-31, 1, 1, grid.height, "-")
+  
+  gra.makeBox(1, 1, 30, grid.height)
+  for k,v in ipairs(apps) do
+    gra.makeBoxAdapt(1, 1+(k-1)*4, 30, 5)
+    gra.text(3, 2+(k-1)*4, v.title)
+    gra.text(26, 2+(k-1)*4, v.tag)
+    gra.text(3, 3+(k-1)*4, "PID: " .. v.pid)
+    
+    if k == activeApp then
+      gra.text(10, 4+(k-1)*4, ">> ACTIVE <<")
+    end
+    
+  end
+  
   gra.setArea(grid.width-11, 1, 12, 7, " ") 
   gra.makeBox(grid.width-11, 1, 12, 3)
   gra.makeBoxAdapt(grid.width-11, 3, 12, 3)

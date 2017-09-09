@@ -12,7 +12,7 @@ function app.newTask(dir, tag)
   local pid = 0
   local good = true
   while true do
-    pid = love.math.random(1000, 9999)
+    pid = ('%d'):format(love.math.random(1000, 9999))
     good = true
     for k,v in ipairs(apps) do
       if v.pid == pid then good = false end
