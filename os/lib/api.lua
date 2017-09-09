@@ -1,30 +1,30 @@
 local api = {}
 
-currentPID = 0
+currentpen = 0
 
 -- Graphics
 api.g = {}
 
 function api.g.set(x, y, char)
-  gra.appSet(currentPID, x, y, char)
+  gra.appSet(currentpen, x, y, char)
   return (true)
 end
 
 function api.g.get(x, y)
-  return (gra.appGet(currentPID, x, y))
+  return (gra.appGet(currentpen, x, y))
 end
 
 function api.g.text(x, y, str)
-  gra.appText(currentPID, x, y, str)
+  gra.appText(currentpen, x, y, str)
   return (true)
 end
 
 function api.g.box(x, y, w, h, adapt)
   if adapt == nil then adapt = false end
   if adapt then
-    gra.appMakeBoxAdapt(currentPID, x, y, w, h)
+    gra.appMakeBoxAdapt(currentpen, x, y, w, h)
   else
-    gra.appMakeBox(currentPID, x, y, w, h)
+    gra.appMakeBox(currentpen, x, y, w, h)
   end
   return (true)
 end

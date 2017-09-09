@@ -4,52 +4,49 @@ local app = {}
 
 apps = {}
 
-appManager = {}
+activeApp = 0
 
 function app.newTask(dir, tag)
   
-  -- Getting lowest unused PID.
-  local pid = 0 -- Thanks blueshaman#1784 @ Discord
+  -- Generating new 1000 - 9999 PID
+  local pid = 0
+  local good = true
   while true do
-    pid = pid + 1
-    if apps[pid] == nil then
-      break
+    pid = ('%d'):format(love.math.random(1000, 9999))
+    good = true
+    for k,v in ipairs(apps) do
+      if v.pid == pid then good = false end
     end
+    if good then break end
   end
   
+  pen = #apps + 1
+  
   -- Creating app in table apps.
-  apps[pid] = {}
-  apps[pid].code = {}
-  apps[pid].dir = dir
-  apps[pid].tag = tag
-  app.newEnvironment(dir, pid)
+  apps[pen] = {}
+  apps[pen].pid = pid
+  apps[pen].code = {}
+  apps[pen].dir = dir
+  apps[pen].tag = tag
+
+  app.newEnvironment(dir, pen)
   
   -- Setting up default values.
-  apps[pid].width = 30
-  apps[pid].height = 5
-  apps[pid].title = "Untitled App, PID: " .. pid
-  apps[pid].mini = false
+  apps[pen].title = "Untitled App, PID: " .. pid
+  apps[pen].mini = false
   
   -- Running load() function to setup app.
-  appTable = apps[pid].code.load()
-  apps[pid].width = appTable.width
-  apps[pid].height = appTable.height
-  apps[pid].title = appTable.title
-  apps[pid].mini = appTable.mini
+  appTable = apps[pen].code.load()
+  apps[pen].title = appTable.title
+  apps[pen].mini = appTable.mini
   
-  -- Centering window based on size
-  apps[pid].x = math.floor((textGrid.width - apps[pid].width) / 2)
-  apps[pid].y = math.floor((textGrid.height - apps[pid].height) / 2)
+  gra.appCanvasReset(pen)
   
-  gra.appCanvasReset(pid)
-  
-  table.insert(appManager, 1, pid)
-  
-  print("New Task Created. "..pid.." - "..apps[pid].title)
+  print("New Task Created. "..pid.." - "..apps[pen].title)
   
 end
 
-function app.newEnvironment(dir, pid)
+function app.newEnvironment(dir, pen)
   
   -- Setup Sandbox Environment
   local sandbox_env = {
@@ -85,13 +82,13 @@ function app.newEnvironment(dir, pid)
       i = {keyStat=api.i.keyStat}}
   }
   
-  if (apps[pid].tag == "SYS") then
+  if (apps[pen].tag == "SYS") then
     sandbox_env.api.s = {appsTable = api.s.appsTable}
   end
   
   -- Load app in environment
   fnew = setfenv(assert(loadfile(dir, "bt")), sandbox_env)
-  apps[pid].code = fnew()
+  apps[pen].code = fnew()
   
   --[[
   co = coroutine.create(fenv)

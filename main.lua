@@ -94,13 +94,13 @@ function love.load()
   
   math.randomseed(os.time())
   
-  textGrid = {}
-  textGrid.width = math.floor(love.graphics.getWidth() / fontWidth)
-  textGrid.height = math.floor(love.graphics.getHeight() / fontHeight)
-  textGrid.widthbuffer = (love.graphics.getWidth() - textGrid.width * fontWidth) / 2
-  textGrid.heightbuffer = (love.graphics.getHeight() - textGrid.height * fontHeight) / 2
-  textGrid.fontwidth = fontWidth
-  textGrid.fontheight = fontHeight
+  grid = {}
+  grid.width = math.floor(love.graphics.getWidth() / fontWidth)
+  grid.height = math.floor(love.graphics.getHeight() / fontHeight)
+  grid.widthbuffer = (love.graphics.getWidth() - grid.width * fontWidth) / 2
+  grid.heightbuffer = (love.graphics.getHeight() - grid.height * fontHeight) / 2
+  grid.fontwidth = fontWidth
+  grid.fontheight = fontHeight
   
   -- Load Apps
   for k,v in ipairs(systemApps) do
@@ -128,42 +128,34 @@ function love.update(dt)
     love.event.quit()
   end
   
-  -- Window Moving
+  --[[ Window Moving
   if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
     if ticks % 2 == 0 then
-      local pid = appManager[1]
+      local pen = appManager[1]
       if love.keyboard.isDown("up") then
-        apps[pid].y = apps[pid].y - 1
+        apps[pen].y = apps[pen].y - 1
       end
       if love.keyboard.isDown("down") then
-        apps[pid].y = apps[pid].y + 1
+        apps[pen].y = apps[pen].y + 1
       end
       if love.keyboard.isDown("left") then
-        apps[pid].x = apps[pid].x - 1
+        apps[pen].x = apps[pen].x - 1
       end
       if love.keyboard.isDown("right") then
-        apps[pid].x = apps[pid].x + 1
+        apps[pen].x = apps[pen].x + 1
       end
     end
   end
+  --]]
   
   -- Process processor for processing processes
-  for pid,v in pairs(apps) do
+  for pen,v in pairs(apps) do
     -- ID for graphics functions to handle
-    currentPID = pid
+    currentpen = pen
     
     -- Run the app
-    apps[pid].code.tick()
+    apps[pen].code.tick()
     
-    -- Make sure the app is within the screen
-    if apps[pid].x < 1 then apps[pid].x = 1 end
-    if apps[pid].y < 1 then apps[pid].y = 1 end
-    if apps[pid].x + apps[pid].width - 1 > textGrid.width then
-      apps[pid].x = textGrid.width - apps[pid].width + 1
-    end
-    if apps[pid].y + apps[pid].height - 1 > textGrid.height then
-      apps[pid].y = textGrid.height - apps[pid].height + 1
-    end
   end
   
   
@@ -172,62 +164,63 @@ end
 function love.draw()
   -- Reset Screen
   printOut = {}
-  for i=1, textGrid.height do
+  for i=1, grid.height do
     printOut[i] = {}
-    for j=1, textGrid.width do
+    for j=1, grid.width do
       printOut[i][j] = " "
     end
   end
   
   -- Reset Apps
-  for pid,v in pairs(apps) do
-    gra.appCanvasReset(pid)
+  for pen,v in pairs(apps) do
+    gra.appCanvasReset(pen)
   end
   
+  
   -- Draw Apps
-  for l = #appManager, 1, -1 do
-    pid = appManager[l]
-    
-    --gra.setColor(15)
-    gra.makeBox(apps[pid].x, apps[pid].y, apps[pid].width, apps[pid].height)
-    gra.makeBoxAdapt(apps[pid].x, apps[pid].y, 5, 3)
-    gra.makeBoxAdapt(apps[pid].x+4, apps[pid].y, apps[pid].width-4, 3)
-    gra.makeBoxAdapt(apps[pid].x+4, apps[pid].y, apps[pid].width-4, 3)
-    if (pid == appManager[1]) then
-      sym = "█"
-      gra.set(apps[pid].x, apps[pid].y, sym)
-      gra.set(apps[pid].x+apps[pid].width-1, apps[pid].y, sym)
-      gra.set(apps[pid].x, apps[pid].y+apps[pid].height-1, sym)
-      gra.set(apps[pid].x+apps[pid].width-1, apps[pid].y+apps[pid].height-1, sym)
-    end
-    
-    gra.text(apps[pid].x+1, apps[pid].y+1, apps[pid].tag)
-    gra.text(apps[pid].x+6, apps[pid].y+1, apps[pid].title)
-    
-    currentPID = pid
-    apps[pid].code.draw()
-    
-    for i=1, apps[pid].height-4 do
-      for j=1, apps[pid].width-2 do
-        gra.set(j+apps[pid].x, i+apps[pid].y+2, gra.appGet(pid, j, i))
+  if activeApp ~= 0 then
+    pen = activeApp
+
+    currentpen = pen
+    apps[pen].code.draw(grid.width-66, grid.height)
+
+    for i=1, grid.height do
+      for j=1, grid.width - 66 do
+        gra.set(j+33, i, gra.appGet(pen, j, i))
       end
     end
   end
   
   -- Draw System Info
   --gra.setColor(15)
-  gra.setArea(textGrid.width-11, 1, 12, 7, " ")
-  gra.makeBox(textGrid.width-11, 1, 12, 3)
-  gra.makeBoxAdapt(textGrid.width-11, 3, 12, 3)
-  gra.makeBoxAdapt(textGrid.width-11, 5, 12, 3)
-  gra.text(textGrid.width-9, 2, os.date():sub(10, 17))
-  gra.text(textGrid.width-9, 4, os.date():sub(1, 8))
-  gra.text(textGrid.width-9, 6, "TPS: " .. love.timer.getFPS())
+  gra.setArea(32, 1, 1, grid.height, "-")
+  gra.setArea(grid.width-31, 1, 1, grid.height, "-")
+  
+  gra.makeBox(1, 1, 30, grid.height)
+  for k,v in ipairs(apps) do
+    gra.makeBoxAdapt(1, 1+(k-1)*4, 30, 5)
+    gra.text(3, 2+(k-1)*4, v.title)
+    gra.text(26, 2+(k-1)*4, v.tag)
+    gra.text(3, 3+(k-1)*4, "PID: " .. v.pid)
+    
+    if k == activeApp then
+      gra.text(10, 4+(k-1)*4, ">> ACTIVE <<")
+    end
+    
+  end
+  
+  gra.setArea(grid.width-11, 1, 12, 7, " ") 
+  gra.makeBox(grid.width-11, 1, 12, 3)
+  gra.makeBoxAdapt(grid.width-11, 3, 12, 3)
+  gra.makeBoxAdapt(grid.width-11, 5, 12, 3)
+  gra.text(grid.width-9, 2, os.date():sub(10, 17))
+  gra.text(grid.width-9, 4, os.date():sub(1, 8))
+  gra.text(grid.width-9, 6, "TPS: " .. love.timer.getFPS())
   
   -- Print Everything
-  for i=1, textGrid.height do
+  for i=1, grid.height do
     line = ""
-    for j=1, textGrid.width do
+    for j=1, grid.width do   
       if not (printOut[i][j] == nil) then
         line = line .. printOut[i][j]
       else
@@ -235,30 +228,30 @@ function love.draw()
       end
       
     end
-    love.graphics.print(line ,textGrid.widthbuffer, textGrid.heightbuffer + 14 * (i-1))
+    love.graphics.print(line ,grid.widthbuffer, grid.heightbuffer + 14 * (i-1))
   end
   
   -- **** ALTERNATE PRINT METHODS FOR COLOR! NEEDS OPTIMIZATION! ****
   
   --[[
-  for i=1, textGrid.height do
+  for i=1, grid.height do
     line = ""
     start = 0
-    for j=1, textGrid.width do
+    for j=1, grid.width do
       if start < 1 then
         start = j
         line = ""
       end
       if colorOut[i][j] ~= currentPrintColor then
-        love.graphics.print(line, textGrid.widthbuffer + (start-1)*textGrid.fontwidth,
-          textGrid.heightbuffer + (i-1)*textGrid.fontheight)
+        love.graphics.print(line, grid.widthbuffer + (start-1)*grid.fontwidth,
+          grid.heightbuffer + (i-1)*grid.fontheight)
         line = printOut[i][j]
         gra.setColor(colorOut[i][j])
         start = j
-      elseif j == textGrid.width then
+      elseif j == grid.width then
         line = line..printOut[i][j]
-        love.graphics.print(line, textGrid.widthbuffer + (start-1)*textGrid.fontwidth,
-          textGrid.heightbuffer + (i-1)*textGrid.fontheight)
+        love.graphics.print(line, grid.widthbuffer + (start-1)*grid.fontwidth,
+          grid.heightbuffer + (i-1)*grid.fontheight)
         start = 0
         line = ""
       else
@@ -291,7 +284,7 @@ function love.draw()
     text = text .. "\n"
   end
   table.insert(finalPrint, text)
-  love.graphics.print(finalPrint ,textGrid.widthbuffer, textGrid.heightbuffer)
+  love.graphics.print(finalPrint ,grid.widthbuffer, grid.heightbuffer)
   --]]
   
   --[[
@@ -324,7 +317,7 @@ function love.draw()
   
   for i=0, 15 do
     gra.setColor(i)
-    love.graphics.print(table.concat(colorPrints[i]), textGrid.widthbuffer, textGrid.heightbuffer)
+    love.graphics.print(table.concat(colorPrints[i]), grid.widthbuffer, grid.heightbuffer)
     
     
   end
@@ -335,23 +328,26 @@ end
 function love.textinput(char)
   
   -- App Controls
-  if apps[appManager[1]].code.textInput ~= nil then
-    apps[appManager[1]].code.textInput(char)
+  if activeApp ~= 0 and apps[activeApp].code.textInput ~= nil then
+    apps[activeApp].code.textInput(char)
   end
 end
 
 function love.keypressed(key, scan, rep)
   
   -- OS Controls
-  if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") then
+  if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") or true then
     if key == "tab" then
-      table.insert(appManager, table.remove(appManager, 1))
+      activeApp = activeApp + 1
+      if activeApp > #apps then
+        activeApp = 1
+      end
     end
   end
 
   -- App Controls
-  if apps[appManager[1]].code.keyPress ~= nil then
-    apps[appManager[1]].code.keyPress(key, rep)
+  if activeApp ~= 0 and apps[activeApp].code.keyPress ~= nil then
+    apps[activeApp].code.keyPress(key, rep)
   end
   
 end
@@ -359,7 +355,7 @@ end
 function love.keyreleased(key, scan)
   
   -- App Controls
-  if apps[appManager[1]].code.keyRelease ~= nil then
-    apps[appManager[1]].code.keyRelease(key)
+  if activeApp ~= 0 and apps[activeApp].code.keyRelease ~= nil then
+    apps[activeApp].code.keyRelease(key)
   end
 end
