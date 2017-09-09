@@ -103,10 +103,10 @@ function love.load()
   textGrid.fontheight = fontHeight
   
   -- Load Apps
-  for k,v in pairs(systemApps) do
+  for k,v in ipairs(systemApps) do
     app.newTask(love.filesystem.getSource( ).. "/os/sysapps/"..v, "SYS")
   end
-  for k,v in pairs(userApps) do
+  for k,v in ipairs(userApps) do
     app.newTask(love.filesystem.getSource( ).. "/programs/"..v, "APP")
   end
   
