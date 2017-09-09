@@ -83,12 +83,14 @@ local function _textBarToDirections(bar)
   elseif (bar == "╩") then up = true; right = true; left = true
   elseif (bar == "╦") then down = true; right = true; left = true
   elseif (bar == "╬") then up = true; down = true; right = true; left = true
-  end
+end
+
+return up, down, right, left
 end
 
 function gra.charCombine(stri, strf)
   local u1, d1, r1, l1 = _textBarToDirections(stri)
-  local u2, d2, r2, l2 = _textBarToDirections(stri)
+  local u2, d2, r2, l2 = _textBarToDirections(strf)
   local up, down, right, left = u1 or u2, d1 or d2, r1 or r2, l1 or l2
   
   -- drastically increased indentation here for easier readbility
