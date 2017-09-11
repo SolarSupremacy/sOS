@@ -28,7 +28,7 @@ function app.draw(width, height)
   
   api.g.text(3, 2, "PID")
   api.g.text(9, 2, "TAG")
-  api.g.text(width - 11, 2, "PROCESS NAME")
+  api.g.text(15, 2, "PROCESS NAME")
   api.g.text(50, 2, "MINI.")
   
   api.g.box(1, 3, 56, 22, true)

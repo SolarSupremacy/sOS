@@ -68,6 +68,9 @@ function gra.set(x, y, str)
 end
 
 function gra.get(x, y)
+  if (y > #printOut) or (x > #printOut[1]) then
+    return (nil)
+  end
   return (printOut[y][x])
 end
 

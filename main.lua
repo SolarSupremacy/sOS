@@ -233,6 +233,8 @@ function love.draw()
   gra.text(grid.width-9, 6, "TPS: " .. love.timer.getFPS())
   
   -- Print Everything
+  
+  ---[[
   for i=1, grid.height do
     line = ""
     for j=1, grid.width do   
@@ -245,6 +247,7 @@ function love.draw()
     end
     love.graphics.print(line ,grid.widthbuffer, grid.heightbuffer + 14 * (i-1))
   end
+  --]]
   
   -- **** ALTERNATE PRINT METHODS FOR COLOR! NEEDS OPTIMIZATION! ****
   
