@@ -19,6 +19,8 @@ Version: 0.0
 
 -- local core = require("sos.core")
 
+require 'os.globals'  -- load globals
+
 gra = require("os.lib.gra")
 app = require("os.lib.app")
 lgc = require("os.lib.lgc")
@@ -94,7 +96,7 @@ function love.load()
   
   math.randomseed(os.time())
   
-  grid = {}
+  -- populate global grid object
   grid.width = math.floor(love.graphics.getWidth() / fontWidth)
   grid.height = math.floor(love.graphics.getHeight() / fontHeight)
   grid.widthbuffer = (love.graphics.getWidth() - grid.width * fontWidth) / 2
@@ -111,12 +113,6 @@ function love.load()
     app.newTask(love.filesystem.getSource( ).. "/programs/"..v, "APP")
   end
   --]]
-  
-  state = {}
-  state.activePEN = 0
-  state.currentPEN = 0
-  state.selectType = 1
-  state.selectNum = 1
   
 end
 

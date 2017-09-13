@@ -2,8 +2,6 @@
 
 local app = {}
 
-apps = {}
-
 function app.newTask(dir, tag)
   
   -- Generating new 1000 - 9999 PID
