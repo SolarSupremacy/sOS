@@ -81,7 +81,9 @@ function app.newEnvironment(dir, pen)
         sqrt = math.sqrt, tan = math.tan, tanh = math.tanh },
     os = { clock = os.clock, difftime = os.difftime, time = os.time },
     api = { g = { set=api.g.set, get=api.g.get, text=api.g.text, box=api.g.box },
-      i = {keyStat=api.i.keyStat}}
+      i = {keyStat=api.i.keyStat}},
+    utf8 = { offset = utf8.offset },
+    lgc = { usub = lgc.usub }
   }
   
   if (apps[pen].tag == "SYS") then

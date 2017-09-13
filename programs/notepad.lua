@@ -14,6 +14,8 @@ function app.load()
   appInfo.title = "Notepad"
   appInfo.mini = false
   
+  cursor = {1, 1}
+  
   text = {""}
   
   ticks = 0
@@ -33,27 +35,25 @@ function app.draw()
   -- Code here will be run after every tick, and the app's canvas is cleared
   -- before this function, so all drawing must be done from here.
   
-  pipe = " "
+  for i=1, #text do
+    api.g.text(1, i, text[i])
+  end
   
   if (ticks % 60) < 30 then
-    pipe = "█"
+    api.g.set(cursor[1], cursor[2], "█")
   end
-  
-  for i=1, #text do
-    printy = text[i]
-    if (i == #text) then
-      printy = printy..pipe 
-    end
-    api.g.text(1, i, printy)
-  end
-  
   
 end
 
 -- Add more functions to do whatever you like down here.
 
 function app.textInput(char)
-  text[#text] = text[#text]..char
+  if (cursor[1] <= #text[cursor[2]]) or true then
+    text[cursor[2]] = lgc.usub(text[cursor[2]], 1, cursor[1]-1) .. char .. lgc.usub(text[cursor[2]], cursor[1], #text[cursor[2]])
+  end
+  
+  cursor[1] = cursor[1] + 1
+  
 end
 
 function app.keyPress(key, rep)
@@ -64,9 +64,35 @@ function app.keyPress(key, rep)
     elseif (#text > 1) then
       table.remove(text, #text)
     end
+    if cursor[1] > 1 then
+      cursor[1] = cursor[1] - 1
+    elseif cursor[2] > 1 then
+      cursor[2] = cursor[2] - 1
+      cursor[1] = #text[cursor[2]] + 1
+    end
   elseif (key == "return") then
     text[#text+1] = ""
+    cursor[1] = 1
+    cursor[2] = cursor[2] + 1
+  elseif (key == "right") then
+    cursor[1] = cursor[1] + 1
+  elseif (key == "left") then
+    cursor[1] = cursor[1] - 1
+    if cursor[1] < 1 and cursor[2] > 1 then
+      cursor[2] = cursor[2] - 1
+      cursor[1] = #text[cursor[2]] + 1
+    end
+  elseif (key == "down") then
+    cursor[2] = cursor[2] + 1
+  elseif (key == "up") then
+    cursor[2] = cursor[2] - 1
   end
+  
+  if cursor[2] > #text then cursor[2] = #text end
+  if cursor[2] < 1 then cursor[2] = 1 end
+  if cursor[1] > #text[cursor[2]] + 1 then cursor[1] = #text[cursor[2]] + 1 end
+  if cursor[1] < 1 then cursor[1] = 1 end
+  
 end
 
 return (app)

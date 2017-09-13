@@ -18,4 +18,11 @@ function lgc.copyTable(object) -- mpappas @ forums.coronalabs.com
   return _copy(object)
 end
 
+function lgc.usub(str, i, j)
+  if (j < i) then return ("") end
+  return (string.sub(str, utf8.offset(str, i), utf8.offset(str, j)))
+end
+
+
+
 return (lgc)
