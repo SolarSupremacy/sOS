@@ -1,0 +1,35 @@
+language: python
+sudo: false
+
+env:
+  - LUA="luajit 2.0"
+  - LUA="luajit 2.1"
+
+before_install:
+  - pip install hererocks
+  - hererocks env --$LUA -rlatest
+  - source env/bin/activate
+
+  - luarocks install luafilesystem
+  - luarocks install luacheck
+#  - luarocks install luacov                       # these come later once we have unit tests >:D
+#  - luarocks install luacov-coveralls
+#  - luarocks install busted
+
+install:
+#  - luarocks make
+  - echo 'build'
+
+script:
+  - luacheck $TRAVIS_BUILD_DIR/
+#  - busted
+
+after_success:
+#  - luacov-coveralls
+
+notifications:
+  email:
+    recipients: 
+      - zeeatgit@gmail.com
+    on_success: change
+    on_failure: change
