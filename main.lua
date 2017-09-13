@@ -21,8 +21,8 @@ Version: 0.0
 
 gra = require("os.lib.gra")
 app = require("os.lib.app")
-api = require("os.lib.api")
 lgc = require("os.lib.lgc")
+api = require("packages.api")
 utf8 = require("utf8")
 
 local gra, app, api, lgc, utf8, love = gra, app, api, lgc, utf8, love

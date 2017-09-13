@@ -266,66 +266,8 @@ function gra.appSet(pen, x, y, str)
   --]]
 end
 
-function gra.appSeto(pen, x, y, str)
-  gra.appSet(pen, x, y, gra.charCombine(gra.appGet(pen, x, y), str))
-end
-
 function gra.appGet(pen, x, y)
   return (apps[pen].canvas[y][x])
-end
-
-function gra.appMakeBox(pen, x, y, w, h)
-  gra.appSet(pen, x, y, "╔")
-  gra.appSet(pen, x+w-1, y, "╗")
-  gra.appSet(pen, x, y+h-1, "╚")
-  gra.appSet(pen, x+w-1, y+h-1, "╝")
-  
-  for i=1, w-2 do
-    gra.appSet(pen, x+i, y, "═")
-    gra.appSet(pen, x+i, y+h-1, "═")
-  end
-  
-  for i=1, h-2 do
-    gra.appSet(pen, x, y+i, "║")
-    gra.appSet(pen, x+w-1, y+i, "║")
-  end
-  
-  for i=1, w-2 do
-    for j=1, h-2 do
-      gra.appSet(pen, x+i, y+j, " ")
-    end
-  end
-  
-end
-
-function gra.appMakeBoxAdapt(pen, x, y, w, h)
-  gra.appSeto(pen, x, y, "╔")
-  gra.appSeto(pen, x+w-1, y, "╗")
-  gra.appSeto(pen, x, y+h-1, "╚")
-  gra.appSeto(pen, x+w-1, y+h-1, "╝")
-  
-  for i=1, w-2 do
-    gra.appSeto(pen, x+i, y, "═")
-    gra.appSeto(pen, x+i, y+h-1, "═")
-  end
-  
-  for i=1, h-2 do
-    gra.appSeto(pen, x, y+i, "║")
-    gra.appSeto(pen, x+w-1, y+i, "║")
-  end
-  
-  for i=1, w-2 do
-    for j=1, h-2 do
-      gra.appSeto(pen, x+i, y+j, " ")
-    end
-  end
-  
-end
-
-function gra.appText(pen, x, y, str)
-  for i=1, utf8.len(str) do
-    gra.appSet(pen, x+i-1, y, string.sub(str, utf8.offset(str, i), utf8.offset(str, i+1)-1))
-  end
 end
 
 return (gra)
