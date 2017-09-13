@@ -1,7 +1,10 @@
+stds.sOS = {
+  globals = { 'state', 'apps', 'grid' };
+  read_globals = {};
+}
+
+
 return {
   codes = true;
-  std = {
-    globals = { 'state', 'apps', 'grid' };
-    read_globals = {};
-  };
+  std = 'luajit+love+sOS';
 }
