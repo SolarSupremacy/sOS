@@ -1,12 +1,10 @@
--- sOS Applications Library
-
 local app = {}
+
+-- sOS Applications Library
 
 function app.newTask(dir, tag)
   
   -- Generating new 1000 - 9999 PID
-  local pid = 0
-  local good = true
   while true do
     pid = ('%d'):format(love.math.random(1000, 9999))
     good = true
