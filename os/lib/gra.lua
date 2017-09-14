@@ -1,7 +1,6 @@
--- sOS Graphics Library
-
 local gra = {}
 
+-- sOS Graphics Library
 
 -- Convert color code (0-15) to RGB values
 local function _colorcodeToRGB(x)
@@ -23,7 +22,6 @@ local function _colorcodeToRGB(x)
   else                  return 255, 255, 255
   end
 end
-
 
 -- currentSetColor = 15
 -- currentPrintColor = 15

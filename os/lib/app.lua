@@ -14,7 +14,9 @@ function app.newTask(dir, tag)
     if good then break end
   end
   
-  pen = #apps + 1
+  
+  
+  local pen = #apps + 1
   
   -- Creating app in table apps.
   apps[pen] = {}
@@ -30,7 +32,7 @@ function app.newTask(dir, tag)
   apps[pen].mini = false
   
   -- Running load() function to setup app.
-  appTable = apps[pen].code.load()
+  local appTable = apps[pen].code.load()
   apps[pen].title = appTable.title
   apps[pen].mini = appTable.mini
   
