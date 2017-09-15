@@ -7,7 +7,7 @@ stds.sOS = {
 }
 
 
-local trav = os.getenv('$TRAVIS_BUILD_DIR')
+local trav = os.getenv('TRAVIS_BUILD_DIR')
 
 
 return {
@@ -18,7 +18,7 @@ return {
   };
   formatter = 'TAP';
   exclude_files = {
-    trav..'/programs/test.lua'
+    trav..'./programs/test.lua'
   };
   files = {
     ['main.lua'] = {
