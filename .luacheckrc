@@ -16,7 +16,6 @@ return {
   ignore = {
     '611',
   };
-  formatter = 'TAP';
   exclude_files = {
     trav..'./programs/test.lua'
   };
