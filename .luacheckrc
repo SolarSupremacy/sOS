@@ -28,5 +28,12 @@ return {
   };
   exclude_files = {
     trav..'/programs/test.lua'
+  };
+  files = {
+    ['main.lua'] = {
+      ignore = {
+        '212'
+      }
+    }
   }
 }

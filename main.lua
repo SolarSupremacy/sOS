@@ -21,7 +21,7 @@ Version: 0.0
 
 require 'os.globals'  -- load globals
 
-local gra, app, api, lgc, utf8, love = gra, app, api, lgc, utf8, love
+local gra, app, love = gra, app, love
 
 function love.run()
   
@@ -137,7 +137,7 @@ function love.update(dt)
   --]]
   
   -- Process processor for processing processes
-  for pen,v in pairs(apps) do
+  for pen,_ in pairs(apps) do
     -- ID for graphics functions to handle
     state.currentPEN = pen
     
@@ -160,7 +160,7 @@ function love.draw()
   end
   
   -- Reset Apps
-  for pen,v in pairs(apps) do
+  for pen,_ in pairs(apps) do
     gra.appCanvasReset(pen)
   end
   
@@ -214,7 +214,7 @@ function love.draw()
     
   end
   
-  gra.setArea(grid.width-11, 1, 12, 7, " ") 
+  gra.setArea(grid.width-11, 1, 12, 7, " ")
   gra.makeBox(grid.width-11, 1, 12, 3)
   gra.makeBoxAdapt(grid.width-11, 3, 12, 3)
   gra.makeBoxAdapt(grid.width-11, 5, 12, 3)
@@ -227,7 +227,7 @@ function love.draw()
   ---[[
   for i=1, grid.height do
     line = ""
-    for j=1, grid.width do   
+    for j=1, grid.width do
       if not (printOut[i][j] == nil) then
         line = line .. printOut[i][j]
       else
