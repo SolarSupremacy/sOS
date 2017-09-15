@@ -12,11 +12,11 @@ function app.load()
   
   
   return (appInfo)
-end  
+end
 
 function app.tick()
   
-  -- Code here will be run every tick (or 1/60 of a second). 
+  -- Code here will be run every tick (or 1/60 of a second).
   
   
 end

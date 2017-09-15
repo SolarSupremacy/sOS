@@ -7,6 +7,9 @@ stds.sOS = {
 }
 
 
+local trav = os.genenv('$TRAVIS_BUILD_DIR')
+
+
 return {
   codes = true;
   std = 'luajit+love+sOS';
@@ -16,4 +19,14 @@ return {
     '112',
     '113'
   };
+  formatter = 'TAP';
+  include_files = {
+    trav..'/os',
+    trav..'/packages',
+    trav..'/programs',
+    trav..'/main.lua'
+  };
+  exclude_files = {
+    trav..'/programs/test.lua'
+  }
 }
