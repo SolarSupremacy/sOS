@@ -21,7 +21,7 @@ install:
   - echo 'build'
 
 script:
-  - luacheck
+  - luacheck $TRAVIS_BUILD_DIR/os $TRAVIS_BUILD_DIR/packages $TRAVIS_BUILD_DIR/programs $TRAVIS_BUILD_DIR/main.lua
 #  - busted
 
 after_success:

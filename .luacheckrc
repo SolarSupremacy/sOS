@@ -17,12 +17,6 @@ return {
     '611',
   };
   formatter = 'TAP';
-  include_files = {
-    trav..'/os',
-    trav..'/packages',
-    trav..'/programs',
-    trav..'/main.lua'
-  };
   exclude_files = {
     trav..'/programs/test.lua'
   };
