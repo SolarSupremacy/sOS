@@ -15,9 +15,6 @@ return {
   std = 'luajit+love+sOS';
   ignore = {
     '611',
-    '111',
-    '112',
-    '113'
   };
   formatter = 'TAP';
   include_files = {
