@@ -11,6 +11,6 @@ return {
   codes = true;
   std = 'luajit+love+sOS';
   ignore = {
-    '611'
+    
   };
 }
