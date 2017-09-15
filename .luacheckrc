@@ -10,5 +10,7 @@ stds.sOS = {
 return {
   codes = true;
   std = 'luajit+love+sOS';
-  ignore = '611';
+  ignore = {
+    '611'
+  };
 }
