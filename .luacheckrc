@@ -7,7 +7,7 @@ stds.sOS = {
 }
 
 
-local trav = os.genenv('$TRAVIS_BUILD_DIR')
+local trav = os.getenv('$TRAVIS_BUILD_DIR')
 
 
 return {
