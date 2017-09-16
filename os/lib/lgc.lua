@@ -1,19 +1,20 @@
 local lgc = {}
 
 function lgc.copyTable(object) -- mpappas @ forums.coronalabs.com
-  local lookup_table = {}
-  local function _copy(object)
-    if type(object) ~= "table" then
-      return object
-    elseif lookup_table[object] then
-      return lookup_table[object]
+  local tableLookup = {}
+  local function _copy(obj)
+    if type(obj) ~= "table" then
+      return obj
+    elseif tableLookup[obj] then
+      return tableLookup[obj]
+    else
+      local new_table = {}
+      tableLookup[obj] = new_table
+      for index, value in pairs(obj) do
+        new_table[_copy(index)] = _copy(value)
+      end
     end
-    local new_table = {}
-    lookup_table[object] = new_table
-    for index, value in pairs(object) do
-      new_table[_copy(index)] = _copy(value)
-    end
-    return setmetatable(new_table, getmetatable(object))
+    return setmetatable(new_table, getmetatable(obj))
   end
   return _copy(object)
 end

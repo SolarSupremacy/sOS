@@ -21,14 +21,14 @@ function app.load()
   ticks = 0
   
   return (appInfo)
-end  
+end
 
 function app.tick()
   
-  -- Code here will be run every tick (or 1/60 of a second). 
+  -- Code here will be run every tick (or 1/60 of a second).
   ticks = ticks + 1
   
-end 
+end
 
 function app.draw()
   
@@ -49,14 +49,15 @@ end
 
 function app.textInput(char)
   if (cursor[1] <= #text[cursor[2]]) or true then
-    text[cursor[2]] = lgc.usub(text[cursor[2]], 1, cursor[1]-1) .. char .. lgc.usub(text[cursor[2]], cursor[1], #text[cursor[2]])
+    text[cursor[2]] = lgc.usub(text[cursor[2]], 1, cursor[1]-1) .. char .. 
+                      lgc.usub(text[cursor[2]], cursor[1], #text[cursor[2]])
   end
   
   cursor[1] = cursor[1] + 1
   
 end
 
-function app.keyPress(key, rep)
+function app.keyPress(key)--app.keyPress(key, rep)
   ticks = 0
   if (key == "backspace") then
     if (text[#text] ~= "") then

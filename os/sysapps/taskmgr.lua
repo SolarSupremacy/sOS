@@ -12,7 +12,7 @@ function app.load()
   appInfo.title = "Task Manager"
   appInfo.mini = false
   return (appInfo)
-end  
+end
 
 function app.tick()
   
@@ -20,7 +20,7 @@ function app.tick()
   
 end
 
-function app.draw(width, height)
+function app.draw()--app.draw(width, height)
   
   api.g.box(1, 1, 56, 3, false)
   api.g.box(7, 1, 7, 3, true)
