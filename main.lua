@@ -77,7 +77,7 @@ function love.load()
   
   -- Graphics
   love.graphics.setBackgroundColor(0, 0, 0)
-  --love.window.setMode(1820, 980)
+  --love.window.setMode(800, 600)
   love.window.setFullscreen(true)
   
   -- Processing
