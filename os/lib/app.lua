@@ -5,6 +5,8 @@ local app = {}
 function app.newTask(dir, tag)
   
   -- Generating new 1000 - 9999 PID
+  local pid
+  local good
   while true do
     pid = ('%d'):format(love.math.random(1000, 9999))
     good = true
@@ -89,7 +91,7 @@ function app.newEnvironment(dir, pen)
   end
   
   -- Load app in environment
-  fnew = setfenv(assert(loadfile(dir, "bt")), sandbox_env)
+  local fnew = setfenv(assert(loadfile(dir, "bt")), sandbox_env)
   apps[pen].code = fnew()
   
   --[[

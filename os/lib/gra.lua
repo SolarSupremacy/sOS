@@ -55,23 +55,22 @@ function gra.set(x, y, str)
   
   if str == "\n" or str == "\t" then str = " " end
   --color = color or 15
-  if (y > #printOut) or (x > #printOut[1]) then
+  if (y > #getPrintOut()) or (x > #getPrintOut()[1]) then
     return
   end
   if (y < 1) or (x < 1) then
     return
   end
-  printOut[y][x] = str
+  setPrintOut(x, y, str)
   --colorOut[y][x] = currentSetColor
 end
 
 function gra.get(x, y)
-  if (y > #printOut) or (x > #printOut[1]) then
+  if (y > #getPrintOut()) or (x > #getPrintOut()[1]) then
     return (nil)
   end
   return (printOut[y][x])
 end
-
 
 local function _textBarToDirections(bar)
   local up, down, right, left = false, false, false, false

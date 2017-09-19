@@ -1,10 +1,10 @@
 local app = {}
 
 -- Define global variables for your app here.
-
+at = {}
 
 function app.load()
-  appInfo = {}
+  local appInfo = {}
   -- Define values on load.
   -- For reference, inner window dimentions are 4 shorter and 2 thinner.
   -- Example: outer width 40 and height 20 makes inner width 38 and height 16.

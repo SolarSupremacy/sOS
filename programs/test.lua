@@ -4,7 +4,7 @@ function app.load()
   
   -- Define values on load.
   -- "title" is the text of the window, "mini" is if the app is minimized.
-  appInfo = {}
+  local appInfo = {}
   appInfo.title = "Space Detector"
   appInfo.mini = false
   

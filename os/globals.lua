@@ -1,5 +1,12 @@
 grid = {}
 
+printOut = {}
+
+systemApps = {}
+userApps = {}
+
+ticks = 0
+
 state = {}
 state.activePEN = 0
 state.currentPEN = 0

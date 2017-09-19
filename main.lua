@@ -225,6 +225,7 @@ function love.draw()
   -- Print Everything
   
   ---[[
+  local line
   for i=1, grid.height do
     line = ""
     for j=1, grid.width do
@@ -331,6 +332,14 @@ function love.draw()
   end
   --]]
   
+end
+
+function setPrintOut(x, y, char)
+  printOut[y][x] = char
+end
+
+function getPrintOut()
+  return (printOut)
 end
 
 function love.textinput(char)
