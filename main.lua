@@ -21,7 +21,7 @@ Version: 0.0
 
 require 'os.globals'  -- load globals
 
-local gra, app, love = gra, app, love
+local gra, app, love, crypto = gra, app, love, crypto
 
 function love.run()
   
@@ -137,12 +137,21 @@ function love.update(dt)
   --]]
   
   -- Process processor for processing processes
-  for pen,_ in pairs(apps) do
+  for pen,_ in ipairs(apps) do
     -- ID for graphics functions to handle
     state.currentPEN = pen
     
     -- Run the app
-    apps[pen].code.tick()
+    local status, err = pcall(apps[pen].code.tick)
+    
+    if status then
+      apps[pen].code.tick()
+    else
+      apps[pen].err = err
+    end
+    
+    
+    
     
   end
   
@@ -160,18 +169,34 @@ function love.draw()
   end
   
   -- Reset Apps
+  --[[
   for pen,_ in pairs(apps) do
     gra.appCanvasReset(pen)
   end
-  
+  --]]
   
   -- Draw Apps
   if state.activePEN ~= 0 then
-    pen = state.activePEN
+    local pen = state.activePEN
+    gra.appCanvasReset(pen)
 
     state.currentPEN = pen
-    apps[pen].code.draw(grid.width-66, grid.height)
-
+    
+    local status, err = pcall(apps[pen].code.draw)
+    
+    if status then
+      --apps[pen].code.draw(grid.width-66, grid.height)
+    else
+      apps[pen].err = err
+    end
+    
+    if apps[pen].err ~= "" then
+      api.g.area(1, 1, string.len(apps[pen].err) + 6, 6, "!")
+      api.g.box(2, 2, string.len(apps[pen].err) + 4, 4, false)
+      api.g.text(4, 3, apps[pen].err)
+      api.g.text(4, 4, "'\\' to close error.")
+    end
+    
     for i=1, grid.height do
       for j=1, grid.width - 66 do
         gra.set(j+33, i, gra.appGet(pen, j, i))
@@ -212,6 +237,9 @@ function love.draw()
       gra.text(20, 3+(k-1)*4, ">>>>>>")
     end
     
+    if v.err ~= "" then
+      gra.text(3, 4+(k-1)*4, "Error!")
+    end
   end
   
   gra.setArea(grid.width-11, 1, 12, 7, " ")
@@ -351,6 +379,11 @@ function love.textinput(char)
 end
 
 function love.keypressed(key, scan, rep)
+  
+  if key == "\\" and state.activePEN ~= 0 then
+    print(state.activePEN)
+    apps[state.activePEN].err = ""
+  end
   
   -- OS Controls
   if love.keyboard.isDown("lctrl") or love.keyboard.isDown("rctrl") or true then

@@ -20,9 +20,9 @@ function api.g.text(x, y, str)
 end
 
 function api.g.area(x, y, w, h, char)
-  for _=1, w do
-    for _=1, h do
-      gra.appSet(state.currentPEN, x+w-1, y+h-1, char)
+  for i=1, w do
+    for j=1, h do
+      gra.appSet(state.currentPEN, x+i-1, y+j-1, char)
     end
   end
   return (true)

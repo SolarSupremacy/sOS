@@ -1,7 +1,6 @@
 local app = {}
 
 -- Define global variables for your app here.
-at = {}
 
 function app.load()
   local appInfo = {}
@@ -16,11 +15,11 @@ end
 
 function app.tick()
   
-  at = api.s.appsTable()
-  
 end
 
 function app.draw()--app.draw(width, height)
+  
+  local at = api.s.appsTable()
   
   api.g.box(1, 1, 56, 3, false)
   api.g.box(7, 1, 7, 3, true)

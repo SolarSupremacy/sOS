@@ -26,6 +26,7 @@ function app.newTask(dir, tag)
   apps[pen].code = {}
   apps[pen].dir = dir
   apps[pen].tag = tag
+  apps[pen].err = ""
 
   app.newEnvironment(dir, pen)
   
