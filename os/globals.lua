@@ -1,6 +1,6 @@
 grid = {}
 
-printOut = {}
+canvas = {}
 
 systemApps = {}
 userApps = {}
@@ -8,12 +8,16 @@ userApps = {}
 ticks = 0
 
 state = {}
-state.activePEN = 0
-state.currentPEN = 0
+--state.activePEN = 0
+--state.currentPEN = 0
+state.active = 0
+state.pid = 0
 state.selectType = 1
 state.selectNum = 1
 
 apps = {}
+
+appList = {}
 
 gra = require("os.lib.gra")
 app = require("os.lib.app")

@@ -137,17 +137,17 @@ function love.update(dt)
   --]]
   
   -- Process processor for processing processes
-  for pen,_ in ipairs(apps) do
+  for pid,_ in pairs(apps) do
     -- ID for graphics functions to handle
-    state.currentPEN = pen
+    state.pid = pid
     
     -- Run the app
-    local status, err = pcall(apps[pen].code.tick)
+    local status, err = pcall(apps[pid].code.tick)
     
     if status then
-      apps[pen].code.tick()
+      apps[pid].code.tick()
     else
-      apps[pen].err = err
+      apps[pid].err = err
     end
     
     
@@ -159,12 +159,15 @@ function love.update(dt)
 end
 
 function love.draw()
+  
+  state.pid = 0
+  
   -- Reset Screen
-  printOut = {}
+  canvas = {}
   for i=1, grid.height do
-    printOut[i] = {}
+    canvas[i] = {}
     for j=1, grid.width do
-      printOut[i][j] = " "
+      canvas[i][j] = " "
     end
   end
   
@@ -176,79 +179,89 @@ function love.draw()
   --]]
   
   -- Draw Apps
-  if state.activePEN ~= 0 then
-    local pen = state.activePEN
-    gra.appCanvasReset(pen)
+  if state.active ~= 0 then
+    local pid = appList[state.active]
+    gra.appCanvasReset(pid)
 
-    state.currentPEN = pen
+    state.pid = pid
     
-    local status, err = pcall(apps[pen].code.draw)
+    local status, err = pcall(apps[pid].code.draw, grid.width-66, grid.height)
+    
+    state.pid = 0
     
     if status then
       --apps[pen].code.draw(grid.width-66, grid.height)
     else
-      apps[pen].err = err
+      apps[pid].err = err
     end
     
-    if apps[pen].err ~= "" then
-      api.g.area(1, 1, string.len(apps[pen].err) + 6, 6, "!")
-      api.g.box(2, 2, string.len(apps[pen].err) + 4, 4, false)
-      api.g.text(4, 3, apps[pen].err)
+    if apps[pid].err ~= "" then
+      api.g.area(1, 1, string.len(apps[pid].err) + 6, 6, "!")
+      api.g.box(2, 2, string.len(apps[pid].err) + 4, 4, false)
+      api.g.text(4, 3, apps[pid].err)
       api.g.text(4, 4, "'\\' to close error.")
     end
     
+    --[[
     for i=1, grid.height do
       for j=1, grid.width - 66 do
-        gra.set(j+33, i, gra.appGet(pen, j, i))
+        gra.set(j+33, i, gra.appGet(pid, j, i))
       end
     end
+    --]]
   end
   
   -- Draw System Info
   --gra.setColor(15)
-  gra.setArea(32, 1, 1, grid.height, "-")
-  gra.setArea(grid.width-31, 1, 1, grid.height, "-")
+  api.g.area(32, 1, 1, grid.height, "-")
+  api.g.area(grid.width-31, 1, 1, grid.height, "-")
   
-  gra.makeBox(grid.width-29, 20, 30, #systemApps+2)
+  api.g.box(grid.width-29, 20, 30, #systemApps+2)
   for k,v in ipairs(systemApps) do
     if (state.selectType == 1) and (state.selectNum == k) then
-      gra.text(grid.width-27, 20+k, ">")
+      api.g.text(grid.width-27, 20+k, ">")
     end
-    gra.text(grid.width-25, 20+k, v)
+    api.g.text(grid.width-25, 20+k, v)
   end
   
-  gra.makeBox(grid.width-29, 20+#systemApps+2, 30, #userApps+2)
+  api.g.box(grid.width-29, 20+#systemApps+2, 30, #userApps+2)
   for k,v in ipairs(userApps) do
     if (state.selectType == 2) and (state.selectNum == k) then
-      gra.text(grid.width-27, 20+k+#systemApps+2, ">")
+      api.g.text(grid.width-27, 20+k+#systemApps+2, ">")
     end
-    gra.text(grid.width-25, 20+k+#systemApps+2, v)
+    api.g.text(grid.width-25, 20+k+#systemApps+2, v)
   end
   
   
-  gra.makeBox(1, 1, 30, grid.height)
-  for k,v in ipairs(apps) do
-    gra.makeBoxAdapt(1, 1+(k-1)*4, 30, 5)
-    gra.text(3, 2+(k-1)*4, v.title)
-    gra.text(26, 2+(k-1)*4, v.tag)
-    gra.text(3, 3+(k-1)*4, "PID: " .. v.pid)
+  api.g.box(1, 1, 30, grid.height)
+  local i = 0
+  local pid
+  local app
+  for k,v in ipairs(appList) do
+    pid = v
+    app = apps[v]
+    i = i + 1
+    api.g.box(1, 1+(i-1)*4, 30, 5, true)
+    api.g.text(3, 2+(i-1)*4, app.title)
+    api.g.text(26, 2+(i-1)*4, app.tag)
+    api.g.text(3, 3+(i-1)*4, "PID: " .. pid)
     
-    if k == state.activePEN then
-      gra.text(20, 3+(k-1)*4, ">>>>>>")
+    if pid == appList[state.active] then
+      api.g.text(20, 3+(i-1)*4, ">>>>>>")
     end
     
-    if v.err ~= "" then
-      gra.text(3, 4+(k-1)*4, "Error!")
+    if app.err ~= "" then
+      api.g.text(3, 4+(k-1)*4, "Error!")
     end
   end
   
-  gra.setArea(grid.width-11, 1, 12, 7, " ")
-  gra.makeBox(grid.width-11, 1, 12, 3)
-  gra.makeBoxAdapt(grid.width-11, 3, 12, 3)
-  gra.makeBoxAdapt(grid.width-11, 5, 12, 3)
-  gra.text(grid.width-9, 2, os.date():sub(10, 17))
-  gra.text(grid.width-9, 4, os.date():sub(1, 8))
-  gra.text(grid.width-9, 6, "TPS: " .. love.timer.getFPS())
+  api.g.area(grid.width-11, 1, 12, 7, " ")
+  api.g.box(grid.width-11, 1, 12, 3)
+  api.g.box(grid.width-11, 3, 12, 3, true)
+  api.g.box(grid.width-11, 5, 12, 3, true)
+  api.g.text(grid.width-9, 2, os.date():sub(10, 17))
+  api.g.text(grid.width-9, 4, os.date():sub(1, 8))
+  api.g.text(grid.width-9, 6, "TPS: " .. love.timer.getFPS())
   
   -- Print Everything
   
@@ -257,8 +270,8 @@ function love.draw()
   for i=1, grid.height do
     line = ""
     for j=1, grid.width do
-      if not (printOut[i][j] == nil) then
-        line = line .. printOut[i][j]
+      if not (canvas[i][j] == nil) then
+        line = line .. canvas[i][j]
       else
         line = line .. "!"
       end
@@ -282,17 +295,17 @@ function love.draw()
       if colorOut[i][j] ~= currentPrintColor then
         love.graphics.print(line, grid.widthbuffer + (start-1)*grid.fontwidth,
           grid.heightbuffer + (i-1)*grid.fontheight)
-        line = printOut[i][j]
+        line = canvas[i][j]
         gra.setColor(colorOut[i][j])
         start = j
       elseif j == grid.width then
-        line = line..printOut[i][j]
+        line = line..canvas[i][j]
         love.graphics.print(line, grid.widthbuffer + (start-1)*grid.fontwidth,
           grid.heightbuffer + (i-1)*grid.fontheight)
         start = 0
         line = ""
       else
-        line = line..printOut[i][j]
+        line = line..canvas[i][j]
       end
       
     end
@@ -304,9 +317,9 @@ function love.draw()
   finalPrint = {gra.getColor(15)}
   text = ""
   currentPrintColor = -1
-  for i=1, #printOut do
+  for i=1, #canvas do
     
-    for j=1, #printOut[1] do
+    for j=1, #canvas[1] do
       
       if colorOut[i][j] ~= currentPrintColor then
         table.insert(finalPrint, text)
@@ -314,7 +327,7 @@ function love.draw()
         text = ""
       end
       
-      text = text .. printOut[i][j]
+      text = text .. canvas[i][j]
       
     end
     
@@ -333,14 +346,14 @@ function love.draw()
   
   
   
-  for i=1, #printOut do
+  for i=1, #canvas do
     
-    for j=1, #printOut[1] do
+    for j=1, #canvas[1] do
       
       for k=0, 15 do
         
         if colorOut[i][j] == k then
-          table.insert(colorPrints[k], printOut[i][j])
+          table.insert(colorPrints[k], canvas[i][j])
         else
           table.insert(colorPrints[k], " ")
         end
@@ -362,27 +375,27 @@ function love.draw()
   
 end
 
-function setPrintOut(x, y, char)
-  printOut[y][x] = char
+function setCanvas(x, y, char)
+  canvas[y][x] = char
 end
 
-function getPrintOut()
-  return (printOut)
+function getCanvas()
+  return (canvas)
 end
 
 function love.textinput(char)
   
   -- App Controls
-  if state.activePEN ~= 0 and apps[state.activePEN].code.textInput ~= nil then
-    apps[state.activePEN].code.textInput(char)
+  if state.active ~= 0 and apps[appList[state.active]].code.textInput ~= nil then
+    apps[appList[state.active]].code.textInput(char)
   end
 end
 
 function love.keypressed(key, scan, rep)
   
-  if key == "\\" and state.activePEN ~= 0 then
-    print(state.activePEN)
-    apps[state.activePEN].err = ""
+  if key == "\\" and state.active ~= 0 then
+    print(state.active)
+    apps[state.active].err = ""
   end
   
   -- OS Controls
@@ -390,19 +403,19 @@ function love.keypressed(key, scan, rep)
     
     if key == "tab" then
       if love.keyboard.isDown("lshift") then
-        state.activePEN = (state.activePEN - 1) % (#apps + 1)
+        state.active = (state.active - 1) % (#appList + 1)
       else
-        state.activePEN = (state.activePEN + 1) % (#apps + 1)
+        state.active = (state.active + 1) % (#appList + 1)
       end
         
     end
     
     if key == "escape" then
-      if state.activePEN == 0 then
+      if state.active == 0 then
         love.event.quit()
-      elseif state.activePEN <= #apps then
-        app.endTask(state.activePEN)
-        if state.activePEN > #apps then state.activePEN = #apps end
+      elseif state.active <= #appList then
+        app.endTask(appList[state.active])
+        if state.active > #appList then state.active = #appList end
       end
     end
     
@@ -437,8 +450,8 @@ function love.keypressed(key, scan, rep)
   end
 
   -- App Controls
-  if state.activePEN ~= 0 and apps[state.activePEN].code.keyPress ~= nil then
-    apps[state.activePEN].code.keyPress(key, rep)
+  if state.active ~= 0 and apps[appList[state.active]].code.keyPress ~= nil then
+    apps[state.active].code.keyPress(key, rep)
   end
   
 end
@@ -446,7 +459,7 @@ end
 function love.keyreleased(key, scan)
   
   -- App Controls
-  if state.activePEN ~= 0 and apps[state.activePEN].code.keyRelease ~= nil then
-    apps[state.activePEN].code.keyRelease(key)
+  if state.active ~= 0 and apps[appList[state.active]].code.keyRelease ~= nil then
+    apps[state.active].code.keyRelease(key)
   end
 end

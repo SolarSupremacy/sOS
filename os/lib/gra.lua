@@ -26,11 +26,13 @@ end
 -- currentSetColor = 15
 -- currentPrintColor = 15
 
+--[[
 function gra.setColor(x)
   local r, g, b = _colorcodeToRGB(x)
   love.graphics.setColor(r, g, b)
   
 end
+--]]
 
 --[[
 function gra.getColor(x)
@@ -55,21 +57,42 @@ function gra.set(x, y, str)
   
   if str == "\n" or str == "\t" then str = " " end
   --color = color or 15
-  if (y > #getPrintOut()) or (x > #getPrintOut()[1]) then
-    return
+  
+  if state.pid == 0 then
+    if (y > grid.height) or (x > grid.width) then
+      return
+    end
+    if (y < 1) or (x < 1) then
+      return
+    end
+    
+    setCanvas(x, y, str)
+  else
+    if (y > grid.height) or (x > grid.width - 66) then
+      return
+    end
+    if (y < 1) or (x < 1) then
+      return
+    end
+    
+    setCanvas(x+33, y, str)
   end
-  if (y < 1) or (x < 1) then
-    return
-  end
-  setPrintOut(x, y, str)
+  
   --colorOut[y][x] = currentSetColor
 end
 
 function gra.get(x, y)
-  if (y > #getPrintOut()) or (x > #getPrintOut()[1]) then
-    return (nil)
+  if state.pid == 0 then
+    if (y > grid.height) or (x > grid.width) then
+      return (nil)
+    end
+    return (getCanvas()[y][x])
+  else
+    if (y > grid.height) or (x > grid.width - 66) then
+      return (nil)
+    end
+    return (getCanvas()[y][x+33])
   end
-  return (printOut[y][x])
 end
 
 local function _textBarToDirections(bar)
@@ -160,9 +183,11 @@ function gra.charCombine(stri, strf)
   
 end
 
+--[[
 function gra.seto(x, y, str)
   gra.set(x, y, gra.charCombine(gra.get(x, y), str))
 end
+--]]
 
 function gra.makeBox(x, y, w, h)
   gra.set(x, y, "╔")
@@ -250,21 +275,21 @@ function gra.appCanvasReset(pen)
   
 end
 
-function gra.appSet(pen, x, y, str)
-  if (y > #apps[pen].canvas) or (x > #apps[pen].canvas[1]) then
+function gra.appSet(pid, x, y, str)
+  if (y > #apps[pid].canvas) or (x > #apps[pid].canvas[1]) then
     return
   end
   if (y < 1) or (x < 1) then
     return
   end
-  apps[pen].canvas[y][x] = str
+  apps[pid].canvas[y][x] = str
   --[[
   apps[pen].canvasColor[y][x] = currentSetColor
   --]]
 end
 
-function gra.appGet(pen, x, y)
-  return (apps[pen].canvas[y][x])
+function gra.appGet(pid, x, y)
+  return (apps[pid].canvas[y][x])
 end
 
 return (gra)

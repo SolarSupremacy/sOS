@@ -10,46 +10,53 @@ function app.newTask(dir, tag)
   while true do
     pid = ('%d'):format(love.math.random(1000, 9999))
     good = true
-    for _,v in ipairs(apps) do
-      if v.pid == pid then good = false end
+    for v,_ in pairs(apps) do
+      if v == pid then good = false end
     end
     if good then break end
   end
   
-  
-  
-  local pen = #apps + 1
-  
   -- Creating app in table apps.
-  apps[pen] = {}
-  apps[pen].pid = pid
-  apps[pen].code = {}
-  apps[pen].dir = dir
-  apps[pen].tag = tag
-  apps[pen].err = ""
+  apps[pid] = {}
+  apps[pid].code = {}
+  apps[pid].dir = dir
+  apps[pid].tag = tag
+  apps[pid].err = ""
 
-  app.newEnvironment(dir, pen)
-  
-  -- Setting up default values.
-  apps[pen].title = "Untitled App, PID: " .. pid
-  apps[pen].mini = false
+  app.newEnvironment(dir, pid)
   
   -- Running load() function to setup app.
-  local appTable = apps[pen].code.load()
-  apps[pen].title = appTable.title
-  apps[pen].mini = appTable.mini
+  local appTable = apps[pid].code.load()
+  apps[pid].title = appTable.title or "Untitled App, PID: " .. pid
+  apps[pid].mini = appTable.mini or false
+  apps[pid].max = appTable.max or 1
   
-  gra.appCanvasReset(pen)
+  --gra.appCanvasReset(pid)
   
-  print("New Task Created. "..pid.." - "..apps[pen].title)
+  print("New Task Created. "..pid.." - "..apps[pid].title)
+  
+  table.insert(appList, pid)
+  
+  local similar = 0
+  for k,v in pairs(apps) do
+    if (v.title == apps[pid].title) then similar = similar + 1 end
+  end
+  if similar > apps[pid].max and apps[pid].max ~= -1 then app.endTask(pid) end
   
 end
 
-function app.endTask(pen)
-  table.remove(apps, pen)
+function app.endTask(pid)
+  apps[pid] = nil
+  for k,v in pairs(appList) do
+    if v == pid then
+      table.remove(appList, k)
+      break
+    end
+  end
+  
 end
 
-function app.newEnvironment(dir, pen)
+function app.newEnvironment(dir, pid)
   
   -- Setup Sandbox Environment
   local sandbox_env = {
@@ -87,13 +94,13 @@ function app.newEnvironment(dir, pen)
     lgc = { usub = lgc.usub }
   }
   
-  if (apps[pen].tag == "SYS") then
+  if (apps[pid].tag == "SYS") then
     sandbox_env.api.s = {appsTable = api.s.appsTable}
   end
   
   -- Load app in environment
   local fnew = setfenv(assert(loadfile(dir, "bt")), sandbox_env)
-  apps[pen].code = fnew()
+  apps[pid].code = fnew()
   
   --[[
   co = coroutine.create(fenv)
