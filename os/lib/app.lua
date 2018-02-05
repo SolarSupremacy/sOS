@@ -38,7 +38,7 @@ function app.newTask(dir, tag)
   table.insert(appList, pid)
   
   local similar = 0
-  for k,v in pairs(apps) do
+  for _,v in pairs(apps) do
     if (v.title == apps[pid].title) then similar = similar + 1 end
   end
   if similar > apps[pid].max and apps[pid].max ~= -1 then app.endTask(pid) end

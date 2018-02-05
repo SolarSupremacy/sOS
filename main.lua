@@ -450,8 +450,11 @@ function love.keypressed(key, scan, rep)
   end
 
   -- App Controls
-  if state.active ~= 0 and apps[appList[state.active]].code.keyPress ~= nil then
-    apps[state.active].code.keyPress(key, rep)
+
+  if state.active ~= 0 then
+    if apps[appList[state.active]].code.keyPress ~= nil then      
+      apps[appList[state.active]].code.keyPress(key, rep)
+    end
   end
   
 end
