@@ -243,6 +243,12 @@ function gra.text(x, y, str)
   end
 end
 
+
+-- [1, 2]
+-- [3, 4]
+
+-- [[1, 2], [3, 4]]
+
 function gra.setArea(x, y, w, h, str)
   for i=1, h do
     for j=1, w do

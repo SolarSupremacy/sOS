@@ -66,6 +66,14 @@ Result: Draws a rectangle out of ASCII characters. Adapt has special effects des
 
 Return: true
 
+> api.g.bar(x, y, legth, direction, style, percentage)
+
+Inputs: 'x' and 'y' are coordinates for the start of the bar, with (1, 1) being the top left. 'length' is how many characters long the bar should be. 'direction' is the direction, from the start, that the bar will go in. 'style' is the appearance of the bar (more info on styles later, current styles are 'block' and 'fade'). 'percentage' is how much of the bar should be filled. 
+
+Result: Creates a progress-bar display using characters. Bars always round DOWN to the nearest unique display, so 0.9999 will not fill the bar, only 1.0 (or greater) will. 0.0 will always be an empty bar.
+
+Return: true
+
 # API.I - Input
 > api.i.keyStat(key)
 

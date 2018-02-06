@@ -81,6 +81,42 @@ function api.g.box(x, y, w, h, adapt)
   return (true)
 end
 
+function api.g.bar(x, y, length, direction, style, percentage)
+  chList = {}
+  for i=0, length do
+    chPer = percentage * length - i
+    
+    if style == "block" then
+      if chPer >= 1 then
+        chList[i] = "█"
+      else
+        chList[i] = " "
+      end
+    end
+    
+    if style == "fade" then
+      if chPer >= 1 then
+        chList[i] = "█"
+      elseif chPer >= 0.75 then
+        chList[i] = "▓"
+      elseif chPer >= 0.50 then
+        chList[i] = "▒"
+      elseif chPer >= 0.25 then
+        chList[i] = "░"
+      else
+        chList[i] = " "
+      end
+    end
+    
+    return (true)
+  end
+  
+  for i=0, length do
+    gra.set(x+i, y, chList[i])
+  end
+  
+end
+
 ---[[
 function api.g.color(color)
   gra.color(color)
